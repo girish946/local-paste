@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+        <form action="/makePaste" method="post" style="width: 500px">
+            Paste name<br>
+            <input type="text" name="PasteName" style="width: 500px; background-color: white; color:green"><br>
+            PasteContent<br>
+            <textarea name="PasteContent" style="width: 500px; background-color: white; color:green" rows=10></textarea><br>
+            <input type="submit" value="Send">
+            <input type="reset" value="Clear">
+        </form>
+{% endblock %}

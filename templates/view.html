@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+<div style="width:100%; height:100vh">
+	<!-- <textarea class="h-100 w-100" rows=10>{{content}}</textarea> -->
+     <iframe src="/get/{{pasteId}}" style="height:100%; width:100%"></iframe> 
+</div>
+
+{% endblock %}

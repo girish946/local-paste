@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #333333; }
+    </style>
+{% endblock %}
+{% block content %}
+    <!--<h1>Pastes</h1>-->
+    <p class="important">
+      <ul>
+      {% for paste in pastes %}
+          <li><a href="/showPaste/{{paste.Id}}">{{ paste.name }}</a></li>
+      {% endfor %}
+      </ul>
+ 
+    </p>
+{% endblock %}
