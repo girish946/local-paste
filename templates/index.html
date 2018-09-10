@@ -11,7 +11,9 @@
     <p class="important">
       <ul>
       {% for paste in pastes %}
-          <li><a href="/showPaste/{{paste.Id}}">{{ paste.name }}</a></li>
+         <div class="row">
+             <h3><a href="/showPaste/{{paste.Id}}">{{ paste.name }}</a></h3>
+         </div>
       {% endfor %}
       </ul>
  

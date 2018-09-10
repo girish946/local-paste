@@ -10,23 +10,24 @@ app = Flask(__name__)
 
 @app.route("/makePaste", methods=['POST'])
 def makePaste():
-    if insertDb(request.form['PasteContent'], request.form['PasteName'], debug=True):
+    if insertDb(request.form['PasteName'], request.form['PasteContent'],
+                request.form['PasteName'], debug=True):
         return redirect("/")
     else:
         return redirect("/")
 
 
 @app.route("/showPaste/<pasteId>")
-def showPost(pasteId):
+def showPost(pasteId, values="name"):
 
-    data = selectPaste(pasteId) 
-    return render_template("view.html", pasteId=pasteId, Title=data[0][2])
+    data = selectPaste(pasteId, values="name") 
+    return render_template("view.html", pasteId=pasteId, Title=data[0][0])
 
 @app.route("/get/<pasteId>")
 def getPasteId(pasteId):
 
-    data = selectPaste(pasteId)   
-    r = make_response(data[0][1])
+    data = selectPaste(pasteId, values="content")
+    r = make_response(data[0][0])
     r.headers['Content-type'] = 'text/plain; charset=utf-8'
     return r
 
@@ -38,7 +39,7 @@ def newPaste():
 
 @app.route("/")
 def index():
-    pastes = [{"Id":i[0], "name":i[2]} for i in selectDb()]
+    pastes = [{"Id":i[0], "name":i[1]} for i in selectDb()]
     title  = "Pastes" 
     return render_template("index.html", pastes=pastes, Title=title)
 
