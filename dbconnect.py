@@ -52,17 +52,22 @@ def selectPaste(pasteId=0, values="*", debug=False):
     except Exception as e:
         return False
 
-def selectDb(debug=False):
+def selectDb(rowCount=10, selectAll=False,debug=False):
     try:
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute("select * from Pastes;")   
+            if selectAll:
+                cur.execute("select * from Pastes;")    
+            else:
+                query = "SELECT * FROM Pastes LIMIT {0} OFFSET (SELECT COUNT(*) FROM Pastes)-{0};".format(rowCount)
+                cur.execute(query)
+
             rows = cur.fetchall()
             if debug:
                 for i in rows:
                     print(i)
-        return rows
+        return reversed(rows)
 
     except sqlite3.OperationalError as oe:
         if debug:
@@ -82,15 +87,6 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
         pasteId = getRowCount() + 1
     else:
         pasteId = 0
-    '''query = """INSERT INTO Pastes VALUES({0},
-                                        '{1}',
-                                        '{2}',
-                                        '{3}',
-                                         {4})""".format(pasteId,
-                                                   name,
-                                                   content,
-                                                   filename,
-                                                   timestamp)'''
     query = "INSERT INTO Pastes VALUES(?, ?, ?, ?, ?);"
     if debug:
         print("executting query: {0}".format(query))

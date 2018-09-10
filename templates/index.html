@@ -8,14 +8,20 @@
 {% endblock %}
 {% block content %}
     <!--<h1>Pastes</h1>-->
-    <p class="important">
-      <ul>
+    <!-- <p class="important"> -->
+    <div style="overflow-y: scroll; width:100%" class="align-items-center">
       {% for paste in pastes %}
-         <div class="row">
-             <h3><a href="/showPaste/{{paste.Id}}">{{ paste.name }}</a></h3>
-         </div>
+         <a href="/showPaste/{{paste.Id}}">
+             <div class="row">
+                  <div class="col-*-* row h-100 justify-content-center align-items-center" style="width:100%">
+                     <h3>{{ paste.name }}</h3>
+                  </div>
+             </div>
+         </a>
       {% endfor %}
-      </ul>
- 
-    </p>
+    <!-- </p> -->
+    </div>
+    {% if more %}
+    There is more
+    {% endif %}
 {% endblock %}

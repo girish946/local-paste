@@ -39,9 +39,13 @@ def newPaste():
 
 @app.route("/")
 def index():
-    pastes = [{"Id":i[0], "name":i[1]} for i in selectDb()]
-    title  = "Pastes" 
-    return render_template("index.html", pastes=pastes, Title=title)
+    rowCount = getRowCount()
+    pastes = [{"Id":i[0], "name":i[1]} for i in selectDb(rowCount=10, selectAll=True)]
+    title  = "Pastes"
+    if rowCount>10:
+        return render_template("index.html", pastes=pastes, Title=title, more=True)
+    else:
+        return render_template("index.html", pastes=pastes, Title=title, more=False)
 
 
 if __name__ == "__main__":
