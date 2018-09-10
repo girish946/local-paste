@@ -37,12 +37,13 @@ def getRowCount(debug=False):
         if oe == "no such table":
             return False
 
-def selectPaste(pasteId=0, debug=False):
+def selectPaste(pasteId=0, values="*", debug=False):
     try:
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute("select * from Pastes where Id={};".format(pasteId))
+            cur.execute("select {0} from Pastes where Id={1};".format(values,
+                                                                      pasteId))
             rows = cur.fetchall()
             if debug:
                 for i in rows:
@@ -81,7 +82,7 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
         pasteId = getRowCount() + 1
     else:
         pasteId = 0
-    query = """INSERT INTO Pastes VALUES({0},
+    '''query = """INSERT INTO Pastes VALUES({0},
                                         '{1}',
                                         '{2}',
                                         '{3}',
@@ -89,14 +90,15 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
                                                    name,
                                                    content,
                                                    filename,
-                                                   timestamp)
+                                                   timestamp)'''
+    query = "INSERT INTO Pastes VALUES(?, ?, ?, ?, ?);"
     if debug:
         print("executting query: {0}".format(query))
     try:
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute(query)
+            cur.execute(query,(pasteId, name, content, filename, timestamp,))
         if debug:
             print("executed successfully")
         return True
@@ -137,6 +139,6 @@ if __name__ == '__main__':
     elif sys.argv[1] =='i':
         insertTest()
     elif sys.argv[1] == 'g':
-        selectPaste(sys.argv[2], debug=True)
+        selectPaste(sys.argv[2], sys.argv[3], debug=True)
     else:
         pass

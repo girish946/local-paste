@@ -18,16 +18,13 @@ def makePaste():
 
 @app.route("/showPaste/<pasteId>")
 def showPost(pasteId):
+
     data = selectPaste(pasteId) 
     return render_template("view.html", pasteId=pasteId, Title=data[0][2])
 
 @app.route("/get/<pasteId>")
 def getPasteId(pasteId):
-    """data = selectPaste(pasteId)
-    if data:
-        return render_template("view.html", content=data[0][1], Title=data[0][2])
-    else:
-        return redirect("/")"""
+
     data = selectPaste(pasteId)   
     r = make_response(data[0][1])
     r.headers['Content-type'] = 'text/plain; charset=utf-8'
