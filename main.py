@@ -10,8 +10,11 @@ app = Flask(__name__)
 
 @app.route("/makePaste", methods=['POST'])
 def makePaste():
-    if insertDb(request.form['PasteName'], request.form['PasteContent'],
-                request.form['PasteName'], debug=True):
+    name    = request.form['PasteName']
+    content = request.form['PasteContent']
+    if not name:
+        name = "untiteled"
+    if insertDb(name, content, name, debug=True):
         return redirect("/")
     else:
         return redirect("/")
@@ -49,4 +52,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0")

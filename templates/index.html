@@ -9,7 +9,7 @@
 {% block content %}
     <!--<h1>Pastes</h1>-->
     <!-- <p class="important"> -->
-    <div style="overflow-y: scroll; width:100%" class="align-items-center">
+    <div style="overflow-y: auto; overflow-x: hidden; width:100%" class="align-items-center">
       {% for paste in pastes %}
          <a href="/showPaste/{{paste.Id}}">
              <div class="row">
