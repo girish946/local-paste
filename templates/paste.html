@@ -4,12 +4,12 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-
+    
         <form action="/makePaste" method="post" style="overflow-y: auto; overflow-x: hidden; width:70%">
             Paste name<br>
             <input type="text" name="PasteName" style="width: 100%; background-color: white; color:green"><br>
             PasteContent<br>
-            <textarea name="PasteContent" style="width: 100%; background-color: white; color:green" rows=10></textarea><br>
+            <textarea name="PasteContent" style="width: 100%; background-color: white; color:green" rows=11></textarea><br>
             <input type="submit" value="Send">
             <input type="reset" value="Clear">
         </form>

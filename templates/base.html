@@ -14,7 +14,7 @@
     <link href="/static/css/scrolling-nav.css" rel="stylesheet">
         {% block head %}
 
-        <title>{% block title %}{% endblock %} - LocalPaste</title>
+        <title>{{ Title }} - LocalPaste</title>
 
         {% endblock %}
     </head>
@@ -45,7 +45,9 @@
 
 
 		<h1 class="bg-light text-success d-flex flex-column align-items-center">{{ Title }}</h1>
-        <div id="content" class="bg-light text-success d-flex flex-column align-items-center" style="height:70vh; width:100%">{% block content %}{% endblock %}</div>
+        <div id="content" class="bg-light text-success d-flex flex-column align-items-center" style="height:75vh; width:100%">
+          {% block content %}{% endblock %}
+        </div>
 
             <!-- Footer -->
     <footer class="py-5 bg-dark">

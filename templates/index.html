@@ -9,6 +9,7 @@
 {% block content %}
     <!--<h1>Pastes</h1>-->
     <!-- <p class="important"> -->
+    
     <div style="overflow-y: auto; overflow-x: hidden; width:100%" class="align-items-center">
       {% for paste in pastes %}
          <a href="/showPaste/{{paste.Id}}">
@@ -21,7 +22,4 @@
       {% endfor %}
     <!-- </p> -->
     </div>
-    {% if more %}
-    There is more
-    {% endif %}
 {% endblock %}

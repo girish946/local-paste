@@ -52,6 +52,24 @@ def selectPaste(pasteId=0, values="*", debug=False):
     except Exception as e:
         return False
 
+def searchPaste(col="content",search=None, debug=False):
+    try:
+        print( "search ", search)
+        con = getConnection()
+        query = "select * from Pastes where content like ? or name like ?";
+        with con:
+            cur = con.cursor()
+            cur.execute(query, ('%'+search+'%', '%'+search+'%',))
+            rows = cur.fetchall()
+            if debug:
+                for i in rows:
+                    print(i)
+            return rows
+    except Exception as e:
+        print(e)
+        return False
+
+
 def selectDb(rowCount=10, selectAll=False,debug=False):
     try:
         con = getConnection()
@@ -83,7 +101,6 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
     if not filename:
         filename = name+str(time.time())+".paste"
-    print(getRowCount())
     if getRowCount() >= 0:
         pasteId = getRowCount() + 1
     else:
@@ -109,7 +126,6 @@ def insertTest():
     count = 0
     if getRowCount() >= 0:
         count = getRowCount()
-    print(count)
     content   = "test content {0}".format(count)
     name      = "test name {0}".format(count)
     filename  = "test file name {0}".format(count)
@@ -137,5 +153,7 @@ if __name__ == '__main__':
         insertTest()
     elif sys.argv[1] == 'g':
         selectPaste(sys.argv[2], sys.argv[3], debug=True)
+    elif sys.argv[1] == 'ss':
+        searchPaste(search=sys.argv[3], debug=True)
     else:
         pass
