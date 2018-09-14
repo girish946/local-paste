@@ -38,7 +38,24 @@ def getPasteId(pasteId):
 @app.route("/new")
 def newPaste():
     return render_template("paste.html", Title="Create New Paste")
+@app.route("/makeSearch/", methods=['POST'])
+@app.route("/makeSearch/<keyword>", methods=['GET', 'POST'])
+def makeSearch(keyword=None):
+    print(request.method)
+    if keyword and request.method == 'GET':
+        pastes = [{"Id":i[0], "name":i[1]} for i in searchPaste(search=keyword)]
+    elif not keyword and request.method == 'POST':
+        print("searching for", request.form["keyword"])
+        pastes = [{"Id":i[0], "name":i[1]} for i in searchPaste(search=request.form["keyword"])]
+        title  = "Search: {0}".format(keyword)
+        print(pastes)
+        return render_template("index.html", pastes=pastes, Title=title, more=True)
+    else:
+        return redirect("/search")
 
+@app.route("/search/")
+def showSearch():
+    return render_template("search.html", Title="Search")
 
 @app.route("/")
 def index():
@@ -52,4 +69,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
