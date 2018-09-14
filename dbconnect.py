@@ -6,7 +6,7 @@ import time
 import sys
 
 def getConnection():
-    return sqlite3.connect('test.db')
+    return sqlite3.connect('localPaste.db')
 
 def createDb(debug=False):
     try:
@@ -83,7 +83,8 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
     if not filename:
         filename = name+str(time.time())+".paste"
-    if getRowCount():
+    print(getRowCount())
+    if getRowCount() >= 0:
         pasteId = getRowCount() + 1
     else:
         pasteId = 0
@@ -106,14 +107,14 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
 def insertTest():
 
     count = 0
-    if getRowCount():
+    if getRowCount() >= 0:
         count = getRowCount()
     print(count)
     content   = "test content {0}".format(count)
     name      = "test name {0}".format(count)
     filename  = "test file name {0}".format(count)
     timestamp = time.time()
-    if insertDb(content, filename, timestamp):
+    if insertDb(content, filename, filename=filename, timestamp=timestamp):
         selectDb()
     else:
         createDb()
