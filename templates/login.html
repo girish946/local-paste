@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+        <form action="/makeSearch/" method="POST" style="overflow-y: auto; overflow-x: hidden; width:70%">
+            Login<br>
+            Username<br>
+            <input type="text" name="username" style="width: 100%; background-color: white; color:green"><br>
+            Password<br>
+            <input type="text" name="Password" style="width: 100%; background-color: white; color:green"><br>
+            <input type="submit" value="Send">
+            <input type="reset" value="Clear">
+        </form>
+
+{% endblock %}

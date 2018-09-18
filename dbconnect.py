@@ -13,7 +13,7 @@ def createDb(debug=False):
         con = getConnection()
         with con:    
             cur = con.cursor()    
-            cur.execute("CREATE TABLE Pastes(Id INT, Name Text, Content TEXT,\
+            cur.execute("CREATE TABLE Pastes(Id INTEGER PRIMARY KEY, Name Text, Content TEXT,\
                                              FileName TEXT, Time INT)")
         return True
 
@@ -101,18 +101,19 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
     if not filename:
         filename = name+str(time.time())+".paste"
-    if getRowCount() >= 0:
-        pasteId = getRowCount() + 1
-    else:
-        pasteId = 0
-    query = "INSERT INTO Pastes VALUES(?, ?, ?, ?, ?);"
+    #if getRowCount() >= 0:
+    #    pasteId = getRowCount() + 1
+    #else:
+    #    pasteId = 0
+    query = "INSERT INTO Pastes(name, content, filename, time) VALUES( ?, ?, ?, ?);"
     if debug:
         print("executting query: {0}".format(query))
     try:
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute(query,(pasteId, name, content, filename, timestamp,))
+            #cur.execute(query,(pasteId, name, content, filename, timestamp,))
+            cur.execute(query,( name, content, filename, timestamp))
         if debug:
             print("executed successfully")
         return True
@@ -130,14 +131,28 @@ def insertTest():
     name      = "test name {0}".format(count)
     filename  = "test file name {0}".format(count)
     timestamp = time.time()
-    if insertDb(content, filename, filename=filename, timestamp=timestamp):
+    if insertDb(content, filename, filename=filename, timestamp=timestamp, debug=True):
         selectDb()
     else:
         createDb()
         insertDb(name, content, filename, timestamp)
         selectDb()
 
-
+def deletePaste(pasteId=None, debug=True):
+    if pasteId:
+        query =  'DELETE FROM Pastes WHERE Id=?'
+        try:
+            con = getConnection()
+            with con:
+                cur = con.cursor()
+                cur.execute(query,(pasteId,))
+            if debug:
+                print("executed successfully")
+            return True
+        except Exception as e:
+            if debug:
+                print(e)
+            return False
 
 if __name__ == '__main__':
 
