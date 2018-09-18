@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from app_global import DB_FILE
 import sqlite3 
 import time
 import sys
 
 def getConnection():
-    return sqlite3.connect('localPaste.db')
+    return sqlite3.connect(DB_FILE)
 
 def createDb(debug=False):
     try:

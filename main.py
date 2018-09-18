@@ -3,9 +3,9 @@
 from flask import Flask, flash, redirect, render_template, request
 from flask import make_response
 from dbconnect import *
+from app_global import *
 
-
-app = Flask(__name__)
+#app = Flask(__name__)
 
 
 @app.route("/makePaste", methods=['POST'])
