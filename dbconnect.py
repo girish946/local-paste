@@ -39,16 +39,20 @@ def getRowCount(debug=False):
 
 def selectPaste(pasteId=0, values="*", debug=False):
     try:
+        #print(pasteId, values)
         con = getConnection()
+        query = "select {0} from Pastes where Id=?".format(values)
         with con:
             cur = con.cursor()
-            cur.execute("select ? from Pastes where Id=?;", (values,pasteId,))
+            cur.execute(query, (pasteId,))
             rows = cur.fetchall()
             if debug:
                 for i in rows:
                     print(i)
             return rows
     except Exception as e:
+        if debug:
+            print(e)
         return False
 
 def searchPaste(col="content",search=None, debug=False):
@@ -98,7 +102,7 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 
 
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
-    
+
     if not filename:
         filename = name+str(time.time())+".paste"
 
@@ -109,7 +113,6 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
         con = getConnection()
         with con:
             cur = con.cursor()
-            #cur.execute(query,(pasteId, name, content, filename, timestamp,))
             cur.execute(query,( name, content, filename, timestamp))
         if debug:
             print("executed successfully")

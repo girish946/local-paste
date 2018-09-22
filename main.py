@@ -1,4 +1,5 @@
 #! python3
+# -*- coding: utf-8 -*-
 
 from flask import Flask, flash, redirect, render_template, request
 from flask import make_response
@@ -11,7 +12,7 @@ import os
 
 @app.route("/showPaste/<pasteId>")
 def showPost(pasteId, values="name"):
-    data = selectPaste(pasteId, values="name") 
+    data = selectPaste(pasteId, values="name")
     return render_template("view.html", pasteId=pasteId, Title=data[0][0])
 
 @app.route("/new")
@@ -22,14 +23,14 @@ def newPaste():
 @app.route("/makeSearch/", methods=['POST'])
 @app.route("/makeSearch/<keyword>", methods=['GET', 'POST'])
 def makeSearch(keyword=None):
-    print(request.method)
+    #print(request.method)
     if keyword and request.method == 'GET':
         pastes = [{"Id":i[0], "name":i[1]} for i in searchPaste(search=keyword)]
     elif not keyword and request.method == 'POST':
-        print("searching for", request.form["keyword"])
+        #print("searching for", request.form["keyword"])
         pastes = [{"Id":i[0], "name":i[1]} for i in searchPaste(search=request.form["keyword"])]
         title  = "Search: {0}".format(keyword)
-        print(pastes)
+        #print(pastes)
         return render_template("index.html", pastes=pastes, Title=title, more=True)
     else:
         return redirect("/search")
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", help="the db file", type=str)
     arg = parser.parse_args()
-    print(arg.db)
+    #print(arg.db)
     if arg.db and arg.db.endswith(".db"):
         print("swithing db to", arg.db)
         if os.path.exists(arg.db):

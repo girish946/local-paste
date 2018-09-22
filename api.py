@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from flask import Flask, flash, redirect, render_template, request
 from flask import make_response
 from dbconnect import *
@@ -18,7 +21,8 @@ def makePaste():
 @app.route("/get/<pasteId>")
 def getPasteId(pasteId):
 
-    data = selectPaste(pasteId, values="content")
+    data = selectPaste(pasteId=pasteId, values="content", debug=True)
+    #print("data", data)
     r = make_response(data[0][0])
     r.headers['Content-type'] = 'text/plain; charset=utf-8'
     return r
