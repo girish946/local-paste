@@ -5,13 +5,12 @@ from flask import make_response
 from api import *
 from dbconnect import *
 from app_global import *
-
-#app = Flask(__name__)
+import argparse
+import os
 
 
 @app.route("/showPaste/<pasteId>")
 def showPost(pasteId, values="name"):
-
     data = selectPaste(pasteId, values="name") 
     return render_template("view.html", pasteId=pasteId, Title=data[0][0])
 
@@ -35,9 +34,11 @@ def makeSearch(keyword=None):
     else:
         return redirect("/search")
 
+
 @app.route("/search/")
 def showSearch():
     return render_template("search.html", Title="Search")
+
 
 @app.route("/")
 def index():
@@ -54,4 +55,15 @@ def login():
     return render_template("login.html", Title="Login")
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--db", help="the db file", type=str)
+    arg = parser.parse_args()
+    print(arg.db)
+    if arg.db and arg.db.endswith(".db"):
+        print("swithing db to", arg.db)
+        if os.path.exists(arg.db):
+            print("file exists")
+            config["DB_FILE"] = arg.db
+        print(config)
     app.run(host="0.0.0.0", debug=True)

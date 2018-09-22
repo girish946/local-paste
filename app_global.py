@@ -5,5 +5,6 @@ home = expanduser("~")
 # init flask app
 app     = Flask(__name__)
 
-# sqlite DB file
-DB_FILE = home+'/.local-paste/localPaste.db'
+config = {
+    "DB_FILE": home+'/.local-paste/localPaste.db'
+}

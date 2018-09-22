@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from app_global import DB_FILE
+import app_global
 import sqlite3 
 import time
 import sys
 
 def getConnection():
-    return sqlite3.connect(DB_FILE)
+    return sqlite3.connect(app_global.config["DB_FILE"])
 
 def createDb(debug=False):
     try:
@@ -42,8 +42,7 @@ def selectPaste(pasteId=0, values="*", debug=False):
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute("select {0} from Pastes where Id={1};".format(values,
-                                                                      pasteId))
+            cur.execute("select ? from Pastes where Id=?;", (values,pasteId,))
             rows = cur.fetchall()
             if debug:
                 for i in rows:
@@ -78,8 +77,8 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
             if selectAll:
                 cur.execute("select * from Pastes;")    
             else:
-                query = "SELECT * FROM Pastes LIMIT {0} OFFSET (SELECT COUNT(*) FROM Pastes)-{0};".format(rowCount)
-                cur.execute(query)
+                query = "SELECT * FROM Pastes LIMIT ? OFFSET (SELECT COUNT(*) FROM Pastes)-?;"
+                cur.execute(query, (rowCount, rowCount,))
 
             rows = cur.fetchall()
             if debug:
@@ -99,12 +98,10 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 
 
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
+    
     if not filename:
         filename = name+str(time.time())+".paste"
-    #if getRowCount() >= 0:
-    #    pasteId = getRowCount() + 1
-    #else:
-    #    pasteId = 0
+
     query = "INSERT INTO Pastes(name, content, filename, time) VALUES( ?, ?, ?, ?);"
     if debug:
         print("executting query: {0}".format(query))
