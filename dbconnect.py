@@ -6,9 +6,16 @@ import time
 import sys
 
 def getConnection():
+    """
+    returns the db connection.
+    """
     return sqlite3.connect(app_global.config["DB_FILE"])
 
 def createDb(debug=False):
+    """
+    creates the db.
+    """
+
     try:
         con = getConnection()
         with con:    
@@ -24,6 +31,10 @@ def createDb(debug=False):
 
 
 def getRowCount(debug=False):
+    """
+    returns the total number of records in the db.
+    """
+
     try:
         con = getConnection()
         with con:
@@ -38,6 +49,10 @@ def getRowCount(debug=False):
             return False
 
 def selectPaste(pasteId=0, values="*", debug=False):
+    """
+    returns given vlaue for the given record.
+    """
+
     try:
         #print(pasteId, values)
         con = getConnection()
@@ -56,6 +71,10 @@ def selectPaste(pasteId=0, values="*", debug=False):
         return False
 
 def searchPaste(col="content",search=None, debug=False):
+    """
+    returns all of the pastes containing given keyword.
+    """
+
     try:
         print( "search ", search)
         con = getConnection()
@@ -74,6 +93,10 @@ def searchPaste(col="content",search=None, debug=False):
 
 
 def selectDb(rowCount=10, selectAll=False,debug=False):
+    """
+    returns given number of latest records.
+    """
+
     try:
         con = getConnection()
         with con:
@@ -102,6 +125,10 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
 
 
 def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
+    """
+    inserts a new record with given name, content, filename and timestamp in
+    the database.
+    """
 
     if not filename:
         filename = name+str(time.time())+".paste"
@@ -131,7 +158,8 @@ def insertTest():
     name      = "test name {0}".format(count)
     filename  = "test file name {0}".format(count)
     timestamp = time.time()
-    if insertDb(content, filename, filename=filename, timestamp=timestamp, debug=True):
+    if insertDb(content, filename, filename=filename, timestamp=timestamp,
+                 debug=True):
         selectDb()
     else:
         createDb()
@@ -139,6 +167,9 @@ def insertTest():
         selectDb()
 
 def deletePaste(pasteId=None, debug=True):
+    """
+    deletes the given paste.
+    """
     if pasteId:
         query =  'DELETE FROM Pastes WHERE Id=?'
         try:
