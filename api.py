@@ -4,11 +4,12 @@
 from flask import Flask, flash, redirect, render_template, request
 from flask import make_response
 from dbconnect import *
-from app_global import *
+from app_global import app
+
 
 @app.route("/makePaste", methods=['POST'])
 def do_paste():
-    name    = request.form['PasteName']
+    name = request.form['PasteName']
     content = request.form['PasteContent']
     if not name:
         name = "untiteled"
@@ -22,24 +23,29 @@ def do_paste():
 def do_get(pasteId):
 
     data = selectPaste(pasteId=pasteId, values="content")
-    #print("data", data)
+    # print("data", data)
     r = make_response(data[0][0])
     r.headers['Content-type'] = 'text/plain; charset=utf-8'
     return r
+
 
 @app.route("/update", methods=["POST"])
 def do_update():
     pasteId = request.form['PasteId']
     content = request.form['PasteContent']
-    result = updatePaste(pasteId=pasteId, content=content)    
+    result = updatePaste(pasteId=pasteId, content=content)
+    if not result:
+        # need to falsh warning here
+        pass
     return redirect("/")
+
 
 @app.route("/delete/<pasteId>")
 def do_delete(pasteId):
-	if pasteId:
-		#print("deleting :",pasteId)
-		if deletePaste(pasteId):
+    if pasteId:
+        # print("deleting :",pasteId)
+        if deletePaste(pasteId):
 
-			return redirect("/")
-		else:
-			return "paste not deleted"
+            return redirect("/")
+        else:
+            return "paste not deleted"

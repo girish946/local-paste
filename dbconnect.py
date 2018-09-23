@@ -1,15 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import app_global
-import sqlite3 
+import sqlite3
 import time
 import sys
+
 
 def getConnection():
     """
     returns the db connection.
     """
     return sqlite3.connect(app_global.config["DB_FILE"])
+
 
 def createDb(debug=False):
     """
@@ -18,15 +20,16 @@ def createDb(debug=False):
 
     try:
         con = getConnection()
-        with con:    
-            cur = con.cursor()    
-            cur.execute("CREATE TABLE Pastes(Id INTEGER PRIMARY KEY, Name Text, Content TEXT,\
-                                             FileName TEXT, Time INT)")
+        with con:
+            cur = con.cursor()
+            cur.execute("CREATE TABLE Pastes(Id INTEGER PRIMARY KEY, Name Text,\
+                                             Content TEXT, FileName TEXT,\
+                                             Time INT)")
         return True
 
     except sqlite3.OperationalError as oe:
         if debug:
-            print(oe," has Row count:",  getRowCount())
+            print(oe, " has Row count:",  getRowCount())
         return False
 
 
@@ -48,13 +51,13 @@ def getRowCount(debug=False):
         if oe == "no such table":
             return False
 
+
 def selectPaste(pasteId=0, values="*", debug=False):
     """
     returns given vlaue for the given record.
     """
 
     try:
-        #print(pasteId, values)
         con = getConnection()
         query = "select {0} from Pastes where Id=?".format(values)
         with con:
@@ -70,15 +73,15 @@ def selectPaste(pasteId=0, values="*", debug=False):
             print(e)
         return False
 
-def searchPaste(col="content",search=None, debug=False):
+
+def searchPaste(col="content", search=None, debug=False):
     """
     returns all of the pastes containing given keyword.
     """
 
     try:
-        #print( "search ", search)
         con = getConnection()
-        query = "select * from Pastes where content like ? or name like ?";
+        query = "select * from Pastes where content like ? or name like ?"
         with con:
             cur = con.cursor()
             cur.execute(query, ('%'+search+'%', '%'+search+'%',))
@@ -90,6 +93,7 @@ def searchPaste(col="content",search=None, debug=False):
     except Exception as e:
         print(e)
         return False
+
 
 def updatePaste(pasteId=0, content=None, debug=True):
     """
@@ -113,7 +117,8 @@ def updatePaste(pasteId=0, content=None, debug=True):
     else:
         return False
 
-def selectDb(rowCount=10, selectAll=False,debug=False):
+
+def selectDb(rowCount=10, selectAll=False, debug=False):
     """
     returns given number of latest records.
     """
@@ -123,9 +128,10 @@ def selectDb(rowCount=10, selectAll=False,debug=False):
         with con:
             cur = con.cursor()
             if selectAll:
-                cur.execute("select * from Pastes;")    
+                cur.execute("select * from Pastes;")
             else:
-                query = "SELECT * FROM Pastes LIMIT ? OFFSET (SELECT COUNT(*) FROM Pastes)-?;"
+                query = "SELECT * FROM Pastes LIMIT ? OFFSET (SELECT COUNT(*)\
+                         FROM Pastes)-?;"
                 cur.execute(query, (rowCount, rowCount,))
 
             rows = cur.fetchall()
@@ -154,14 +160,15 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
     if not filename:
         filename = name+str(time.time())+".paste"
 
-    query = "INSERT INTO Pastes(name, content, filename, time) VALUES( ?, ?, ?, ?);"
+    query = "INSERT INTO Pastes(name, content, filename, time) VALUES \
+             ( ?, ?, ?, ?)"
     if debug:
         print("executting query: {0}".format(query))
     try:
         con = getConnection()
         with con:
             cur = con.cursor()
-            cur.execute(query,( name, content, filename, timestamp))
+            cur.execute(query, (name, content, filename, timestamp))
         if debug:
             print("executed successfully")
         return True
@@ -170,34 +177,37 @@ def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
             print(e)
         return False
 
+
 def insertTest():
 
     count = 0
     if getRowCount() >= 0:
         count = getRowCount()
-    content   = "test content {0}".format(count)
-    name      = "test name {0}".format(count)
-    filename  = "test file name {0}".format(count)
+
+    content = "test content {0}".format(count)
+    name = "test name {0}".format(count)
+    filename = "test file name {0}".format(count)
     timestamp = time.time()
     if insertDb(content, filename, filename=filename, timestamp=timestamp,
-                 debug=True):
+                debug=True):
         selectDb()
     else:
         createDb()
         insertDb(name, content, filename, timestamp)
         selectDb()
 
+
 def deletePaste(pasteId=None, debug=True):
     """
     deletes the given paste.
     """
     if pasteId:
-        query =  'DELETE FROM Pastes WHERE Id=?'
+        query = 'DELETE FROM Pastes WHERE Id=?'
         try:
             con = getConnection()
             with con:
                 cur = con.cursor()
-                cur.execute(query,(pasteId,))
+                cur.execute(query, (pasteId,))
             if debug:
                 print("executed successfully")
             return True
@@ -206,9 +216,9 @@ def deletePaste(pasteId=None, debug=True):
                 print(e)
             return False
 
+
 if __name__ == '__main__':
 
-    #con = sqlite3.connect('test.db')
     content = "Test content"
     t = time.time()
 
@@ -216,7 +226,7 @@ if __name__ == '__main__':
         selectDb(debug=True)
     elif sys.argv[1] == 'a':
         createDb()
-    elif sys.argv[1] =='i':
+    elif sys.argv[1] == 'i':
         insertTest()
     elif sys.argv[1] == 'g':
         selectPaste(sys.argv[2], sys.argv[3], debug=True)
