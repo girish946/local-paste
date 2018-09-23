@@ -39,11 +39,11 @@ def makeSearch(keyword=None):
 @app.route("/search/")
 def showSearch():
     return render_template("search.html", Title="Search")
-    
+
 
 @app.route("/pasteUpdate/<pasteId>")
 def showUpdate(pasteId):
-    data = selectPaste(pasteId=pasteId, values="name, content", debug=True)
+    data = selectPaste(pasteId=pasteId, values="name, content")
     return render_template("paste.html", Title="Create New Paste", 
                             updatePaste=True, pasteId=pasteId,
                             action="/update", PasteName=data[0][0],

@@ -38,6 +38,11 @@
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="/login">Login</a>
             </li>
+            {%if pasteId %}
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/pasteUpdate/{{pasteId}}">Edit This Paste</a>
+            </li>
+            {%endif%}
           </ul>
         </div>
       </div>
