@@ -76,7 +76,7 @@ def searchPaste(col="content",search=None, debug=False):
     """
 
     try:
-        print( "search ", search)
+        #print( "search ", search)
         con = getConnection()
         query = "select * from Pastes where content like ? or name like ?";
         with con:
@@ -91,6 +91,27 @@ def searchPaste(col="content",search=None, debug=False):
         print(e)
         return False
 
+def updatePaste(pasteId=0, content=None, debug=True):
+    """
+    updates the given content for the given pasteId in the database.
+    """
+    if content:
+        query = "UPDATE Pastes SET content = ? WHERE  Id = ?;"
+        try:
+            con = getConnection()
+            with con:
+                cur = con.cursor()
+                cur.execute(query, (content, pasteId))
+                rows = cur.fetchall()
+                if debug:
+                    for i in rows:
+                        print(i)
+                return rows
+        except Exception as e:
+            print(e)
+            return False
+    else:
+        return False
 
 def selectDb(rowCount=10, selectAll=False,debug=False):
     """

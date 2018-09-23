@@ -7,7 +7,7 @@ from dbconnect import *
 from app_global import *
 
 @app.route("/makePaste", methods=['POST'])
-def makePaste():
+def do_paste():
     name    = request.form['PasteName']
     content = request.form['PasteContent']
     if not name:
@@ -19,7 +19,7 @@ def makePaste():
 
 
 @app.route("/get/<pasteId>")
-def getPasteId(pasteId):
+def do_get(pasteId):
 
     data = selectPaste(pasteId=pasteId, values="content", debug=True)
     #print("data", data)
@@ -27,11 +27,18 @@ def getPasteId(pasteId):
     r.headers['Content-type'] = 'text/plain; charset=utf-8'
     return r
 
+@app.route("/update", methods=["POST"])
+def do_update():
+    pasteId = request.form['PasteId']
+    content = request.form['PasteContent']
+    result = updatePaste(pasteId=pasteId, content=content, debug=True)
+    print(result)
+    return redirect("/")
 
 @app.route("/delete/<pasteId>")
 def do_delete(pasteId):
 	if pasteId:
-		print("deleting :",pasteId)
+		#print("deleting :",pasteId)
 		if deletePaste(pasteId):
 
 			return redirect("/")

@@ -5,11 +5,24 @@
 {% endblock %}
 {% block content %}
     
-        <form action="/makePaste" method="post" style="overflow-y: auto; overflow-x: hidden; width:70%">
+        <form action="{{action}}" method="post" style="overflow-y: auto; overflow-x: hidden; width:70%">
+        	{% if updatePaste %}
+        	<input type="text" name="PasteId" style="width: 100%; background-color: white; color:green" value="{{pasteId}}"  hidden ><br>
+        	{% endif %}
             Paste name<br>
-            <input type="text" name="PasteName" style="width: 100%; background-color: white; color:green"><br>
+            <input type="text" name="PasteName" style="width: 100%; background-color: white; color:green"
+            {% if PasteName%}
+            value= "{{PasteName}}"
+            {%endif%}
+            ><br>
+
             PasteContent<br>
-            <textarea name="PasteContent" style="width: 100%; background-color: white; color:green" rows=11></textarea><br>
+            <textarea name="PasteContent" style="width: 100%; background-color: white; color:green" rows=11>
+                {% if PasteContent %}
+                    {{PasteContent}}
+                {% endif %}
+            </textarea><br>
+            
             <input type="submit" value="Send">
             <input type="reset" value="Clear">
         </form>

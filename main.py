@@ -17,7 +17,7 @@ def showPost(pasteId, values="name"):
 
 @app.route("/new")
 def newPaste():
-    return render_template("paste.html", Title="Create New Paste")
+    return render_template("paste.html", Title="Create New Paste", action="/makePaste")
 
 
 @app.route("/makeSearch/", methods=['POST'])
@@ -39,6 +39,15 @@ def makeSearch(keyword=None):
 @app.route("/search/")
 def showSearch():
     return render_template("search.html", Title="Search")
+    
+
+@app.route("/pasteUpdate/<pasteId>")
+def showUpdate(pasteId):
+    data = selectPaste(pasteId=pasteId, values="name, content", debug=True)
+    return render_template("paste.html", Title="Create New Paste", 
+                            updatePaste=True, pasteId=pasteId,
+                            action="/update", PasteName=data[0][0],
+                            PasteContent=data[0][1])
 
 
 @app.route("/")
@@ -52,7 +61,7 @@ def index():
         return render_template("index.html", pastes=pastes, Title=title, more=False)
 
 @app.route("/login")
-def login():
+def showLogin():
     return render_template("login.html", Title="Login")
 
 if __name__ == "__main__":
