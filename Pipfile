@@ -7,6 +7,8 @@ name = "pypi"
 flask = "*"
 requests = "*"
 "flake8" = "*"
+peewee = "*"
+flask-restful = "*"
 
 [dev-packages]
 

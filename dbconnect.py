@@ -1,236 +1,173 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import app_global
-import sqlite3
-import time
-import sys
+
+from peewee import *
+import datetime
+import uuid
+from app_global import config
 
 
-def getConnection():
-    """
-    returns the db connection.
-    """
-    return sqlite3.connect(app_global.config["DB_FILE"])
+db = SqliteDatabase(config["DB_FILE"])
 
 
-def createDb(debug=False):
-    """
-    creates the db.
-    """
+class LocalPaste(Model):
+    class Meta:
+        database = db
 
+
+class Users(LocalPaste):
+    username = CharField(unique=True)
+    Password = CharField()
+
+
+class Pastes(LocalPaste):
+   
+    Id = UUIDField(primary_key = True)
+    Name = CharField()
+    Content = CharField()
+    FileName = CharField()
+    TimeStamp = DateTimeField(default=datetime.datetime.now)
+
+
+def printPastes(pastes):
+    for i in pastes:
+        print(i.Id,  i.Name, i.Content, i.FileName, i.TimeStamp)
+
+
+def createTables():
     try:
-        con = getConnection()
-        with con:
-            cur = con.cursor()
-            cur.execute("CREATE TABLE Pastes(Id INTEGER PRIMARY KEY, Name Text,\
-                                             Content TEXT, FileName TEXT,\
-                                             Time INT)")
-        return True
+        db.connect()
+        db.create_tables([Users, Pastes])
+    except Exception as e:
+        return False
+    return True
 
-    except sqlite3.OperationalError as oe:
+
+def selectDb(limit=10, nolim=False,debug=False):
+    try:
+        if limit:
+            allPastes = Pastes.select().order_by(Pastes.Id.desc()).limit(limit)
+        else:
+            allPastes = Pastes.select().order_by(Pastes.Id.desc())
         if debug:
-            print(oe, " has Row count:",  getRowCount())
+            printPastes(allPastes)
+        return allPastes
+    except Exception as e:
         return False
 
 
-def getRowCount(debug=False):
-    """
-    returns the total number of records in the db.
-    """
-
+def selectPaste(pasteId=None, debug=False):
     try:
-        con = getConnection()
-        with con:
-            cur = con.cursor()
-            cur.execute("SELECT Count(*) FROM Pastes")
-            rows = cur.fetchall()
-            return rows[0][0]
-    except sqlite3.OperationalError as oe:
+        p = Pastes.select().where(Pastes.Id == pasteId)
         if debug:
-            print(oe)
-        if oe == "no such table":
-            return False
+            printPastes(p)
 
-
-def selectPaste(pasteId=0, values="*", debug=False):
-    """
-    returns given vlaue for the given record.
-    """
-
-    try:
-        con = getConnection()
-        query = "select {0} from Pastes where Id=?".format(values)
-        with con:
-            cur = con.cursor()
-            cur.execute(query, (pasteId,))
-            rows = cur.fetchall()
-            if debug:
-                for i in rows:
-                    print(i)
-            return rows
+        return p
     except Exception as e:
         if debug:
-            print(e)
+            print(e, e.message)
         return False
 
 
-def searchPaste(col="content", search=None, debug=False):
-    """
-    returns all of the pastes containing given keyword.
-    """
-
+def insertPaste(name="Untiteled", content=None, filename=None):
     try:
-        con = getConnection()
-        query = "select * from Pastes where content like ? or name like ?"
-        with con:
-            cur = con.cursor()
-            cur.execute(query, ('%'+search+'%', '%'+search+'%',))
-            rows = cur.fetchall()
-            if debug:
-                for i in rows:
-                    print(i)
-            return rows
+        uid = uuid.uuid4()
+        p = Pastes.create(Id=uid, Name=name, Content=content,
+                          FileName=filename)
+        p.save()
     except Exception as e:
-        print(e)
         return False
+    return True
 
 
-def updatePaste(pasteId=0, content=None, debug=True):
-    """
-    updates the given content for the given pasteId in the database.
-    """
-    if content:
-        query = "UPDATE Pastes SET content = ? WHERE  Id = ?;"
-        try:
-            con = getConnection()
-            with con:
-                cur = con.cursor()
-                cur.execute(query, (content, pasteId))
-                rows = cur.fetchall()
-                if debug:
-                    for i in rows:
-                        print(i)
-                return rows
-        except Exception as e:
-            print(e)
-            return False
-    else:
-        return False
+def deletePaste(pasteId=None, debug=False):
 
-
-def selectDb(rowCount=10, selectAll=False, debug=False):
-    """
-    returns given number of latest records.
-    """
-
-    try:
-        con = getConnection()
-        with con:
-            cur = con.cursor()
-            if selectAll:
-                cur.execute("select * from Pastes;")
-            else:
-                query = "SELECT * FROM Pastes LIMIT ? OFFSET (SELECT COUNT(*)\
-                         FROM Pastes)-?;"
-                cur.execute(query, (rowCount, rowCount,))
-
-            rows = cur.fetchall()
-            if debug:
-                for i in rows:
-                    print(i)
-        return reversed(rows)
-
-    except sqlite3.OperationalError as oe:
-        if debug:
-            print(oe)
-        return False
-
-    except Exception as e:
-        if debug:
-            print(e)
-        return False
-
-
-def insertDb(name, content, filename=None, timestamp=time.time(), debug=False):
-    """
-    inserts a new record with given name, content, filename and timestamp in
-    the database.
-    """
-
-    if not filename:
-        filename = name+str(time.time())+".paste"
-
-    query = "INSERT INTO Pastes(name, content, filename, time) VALUES \
-             ( ?, ?, ?, ?)"
-    if debug:
-        print("executting query: {0}".format(query))
-    try:
-        con = getConnection()
-        with con:
-            cur = con.cursor()
-            cur.execute(query, (name, content, filename, timestamp))
-        if debug:
-            print("executed successfully")
-        return True
-    except Exception as e:
-        if debug:
-            print(e)
-        return False
-
-
-def insertTest():
-
-    count = 0
-    if getRowCount() >= 0:
-        count = getRowCount()
-
-    content = "test content {0}".format(count)
-    name = "test name {0}".format(count)
-    filename = "test file name {0}".format(count)
-    timestamp = time.time()
-    if insertDb(content, filename, filename=filename, timestamp=timestamp,
-                debug=True):
-        selectDb()
-    else:
-        createDb()
-        insertDb(name, content, filename, timestamp)
-        selectDb()
-
-
-def deletePaste(pasteId=None, debug=True):
-    """
-    deletes the given paste.
-    """
     if pasteId:
-        query = 'DELETE FROM Pastes WHERE Id=?'
+        print("deleting ", pasteId)
         try:
-            con = getConnection()
-            with con:
-                cur = con.cursor()
-                cur.execute(query, (pasteId,))
-            if debug:
-                print("executed successfully")
-            return True
+           delPaste = Pastes.delete().where(Pastes.Id==pasteId).execute()
         except Exception as e:
-            if debug:
-                print(e)
+            print(e)
             return False
+    return True
+
+
+def updatePaste(pasteId=None, pasteName=None, pasteContent=None,
+                fileName=None ,debug=False):
+    if pasteId:
+        try:
+            pid = Pastes.update(Name = pasteName,
+                                Content = pasteContent,
+                                FileName = fileName).where(
+                                Pastes.Id == pasteId
+                                ).execute()
+
+            if pid:
+                print(pid)
+
+        except Exception as e:
+            print(e)
+
+
+def searchPaste(keyword=None, debug=False):
+    if keyword:
+        try:
+            pastes = Pastes.select().order_by(Pastes.Id.desc()).where(
+                                   (Pastes.Name.contains(keyword))|
+                                   (Pastes.Content.contains(keyword)))
+            if debug:
+                printPastes(pastes)
+            return pastes
+        except Exception as e:
+            print(e)
+            return False
+
 
 
 if __name__ == '__main__':
+    import sys
+    import argparse
 
-    content = "Test content"
-    t = time.time()
+    parser = argparse.ArgumentParser()
 
-    if sys.argv[1] == 's':
-        selectDb(debug=True)
-    elif sys.argv[1] == 'a':
-        createDb()
-    elif sys.argv[1] == 'i':
-        insertTest()
-    elif sys.argv[1] == 'g':
-        selectPaste(sys.argv[2], sys.argv[3], debug=True)
-    elif sys.argv[1] == 'ss':
-        searchPaste(search=sys.argv[3], debug=True)
+    parser.add_argument("action", nargs='?', 
+                        help="Action: [select, insert, search, createDb, delete]")
+    parser.add_argument("--pasteId", default="1", 
+                        help="sets the pasteId for operation", type=int)
+    parser.add_argument("--keyword", help="Keyword for searching", type=str)
+    parser.add_argument("--name", help="PasteName", type=str)
+    parser.add_argument("--content", help="PasteContent", type=str)
+    parser.add_argument("--fileName", help="PasteFilename", type=str)
+    parser.add_argument("--limit", help="Limit on select query",
+                        type=int, default=0)
+
+    arg = parser.parse_args()
+
+    if arg.pasteId:
+        if arg.action == 'select':
+            selectPaste(pasteId=arg.pasteId, debug=True)
+        if arg.action == 'delete':
+            print(deletePaste(pasteId=arg.pasteId, debug=True))
+
+    if arg.keyword:
+        if arg.action == 'search':
+            searchPaste(keyword = arg.keyword, debug=True)
     else:
-        pass
+        if arg.action == 'select':
+            selectDb(limit=arg.limit, debug=True)
+
+        if arg.action == 'insert':
+            pn = "dummy Name"
+            pc = "dummy Content"
+            pf = "dummyFile.txt"
+            if arg.name:
+                pn = arg.name
+            if arg.content:
+                pc = arg.content
+            if arg.fileName:
+                pf = arg.fileName
+            print(insertPaste(name=pn, content=pc, filename=pf))
+
+        if arg.action == 'createDb':
+            createTables()
+
