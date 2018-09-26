@@ -4,19 +4,18 @@
 from flask import Flask, flash, redirect, render_template, request
 from flask import make_response
 from api import *
-from dbconnect import selectPaste, searchPaste, selectDb, getRowCount
+# from dbconnect import selectPaste, searchPaste, selectDb, getRowCount
 from app_global import app, config
 import argparse
 import os
 
 
 @app.route("/showPaste/<pasteId>")
-def showPost(pasteId, values="name"):
-    data = selectPaste(pasteId, values="name")
-    return render_template("view.html", pasteId=pasteId, Title=data[0][0])
+def showPost(pasteId):
+    return render_template("view.html", pasteId=pasteId)
 
 
-@app.route("/new")
+"""@app.route("/new")
 def newPaste():
     return render_template("paste.html", Title="Create New Paste",
                            action="/makePaste")
@@ -46,19 +45,17 @@ def makeSearch(keyword=None):
 
 @app.route("/search/")
 def showSearch():
-    return render_template("search.html", Title="Search")
+    return render_template("search.html", Title="Search")"""
 
 
 @app.route("/pasteUpdate/<pasteId>")
 def showUpdate(pasteId):
-    data = selectPaste(pasteId=pasteId, values="name, content")
     return render_template("paste.html", Title="Create New Paste",
                            updatePaste=True, pasteId=pasteId,
-                           action="/update", PasteName=data[0][0],
-                           PasteContent=data[0][1])
+                           action="/update")
 
 
-@app.route("/")
+"""@app.route("/")
 def index():
     rowCount = getRowCount()
     pastes = [{"Id": i[0], "name":i[1]}
@@ -76,8 +73,11 @@ def index():
 
 @app.route("/login")
 def showLogin():
-    return render_template("login.html", Title="Login")
+    return render_template("login.html", Title="Login")"""
 
+@app.route("/")
+def index():
+    return render_template("temp.html")
 
 if __name__ == "__main__":
 

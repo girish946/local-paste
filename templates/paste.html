@@ -5,25 +5,57 @@
 {% endblock %}
 {% block content %}
     
+        <script >
+            $(document).ready(function(){  
+                $.ajax({
+
+                    'url' : '/api/get/{{pasteId}}',
+                    'type' : 'GET',
+                    'crossDomain':true,
+
+                    'success' : function(data) {
+                        console.log(data);
+                        $("#PasteName").val(data["Name"]);
+                        $("#PasteContent").val(data["Content"]);
+                        }
+                    });
+
+                $('#submit').click(function() {
+                        var data = JSON.stringify(
+                             {
+                                'name': $("#PasteName").val(),
+                                'content': $("#PasteContent").val(),
+                                'id': $("#PasteId").val()
+                            });
+
+                        $.ajax({
+                            'url' : '/api/update/'+$("#PasteId").val(),
+                            'type' : 'PUT',
+                            'crossDomain':true,
+                            'contentType': "application/json",
+                            'dataType': 'json',
+                            'data': data,
+                            'success' : function(data) {
+                                window.location.replace("/showPaste/"+$("#PasteId").val());
+                             }
+                         });
+                    });
+                });
+        </script>
+
         <form action="{{action}}" method="post" style="overflow-y: auto; overflow-x: hidden; width:70%">
         	{% if updatePaste %}
-        	<input type="text" name="PasteId" style="width: 100%; background-color: white; color:green" value="{{pasteId}}"  hidden ><br>
+        	<input type="text" name="PasteId" id="PasteId" style="width: 100%; background-color: white; color:green" value="{{pasteId}}"  hidden ><br>
         	{% endif %}
             Paste name<br>
-            <input type="text" name="PasteName" style="width: 100%; background-color: white; color:green"
-            {% if PasteName%}
-            value= "{{PasteName}}"
-            {%endif%}
+            <input type="text" name="PasteName" id="PasteName" style="width: 100%; background-color: white; color:green"
             ><br>
 
             PasteContent<br>
-            <textarea name="PasteContent" style="width: 100%; background-color: white; color:green" rows=11>
-                {% if PasteContent %}
-                    {{PasteContent}}
-                {% endif %}
+            <textarea name="PasteContent" id="PasteContent" style="width: 100%; background-color: white; color:green" rows=11>
             </textarea><br>
             
-            <input type="submit" value="Send">
+            <input type="button" id="submit" value="submit"/>
             <input type="reset" value="Clear">
         </form>
 {% endblock %}

@@ -6,8 +6,25 @@
 {% block content %}
 
 <div style="width:100%; height:100vh">
-	<!-- <textarea class="h-100 w-100" rows=10>{{content}}</textarea> -->
-     <iframe src="/get/{{pasteId}}" style="height:100%; width:100%"></iframe> 
+	<!-- <textarea class="h-100 w-100" rows=10>{{content}}</textarea> 
+     <iframe src="/api/get/{{pasteId}}" style="height:100%; width:100%"></iframe> -->
+
+     <script >
+            $(document).ready(function(){  
+                  $.ajax({
+                    'url' : '/api/get/{{pasteId}}',
+                    'type' : 'GET',
+                    'crossDomain':true,
+                    'success' : function(data) {
+                        console.log(data);
+                        $('#canv').append('</br></br><div>'+ data['Name']+'</br>'+ data['Content']+'</br>'+ data['Id']+''+'</div></hr>');       
+                        }
+                    });
+                  });
+        </script>
+        <div id="canv" style="height:100%; width:100%">
+            
+        </div>
 </div>
 
 {% endblock %}

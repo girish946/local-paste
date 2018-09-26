@@ -52,9 +52,9 @@ class UpdatePaste(Resource):
 class GetPaste(Resource):
     def get(self, pasteId):
         paste = [i for i in selectPaste(pasteId=pasteId)][0]
-        return {"name":paste.Name, "Id": paste.Id.hex,
-                "content":paste.Content, 
-                "timestamp":paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
+        return {"Name":paste.Name, "Id": paste.Id.hex,
+                "Content":paste.Content,
+                "TimeStamp":paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
 
 
 class SearchPaste(Resource):
