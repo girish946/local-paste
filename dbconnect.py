@@ -46,9 +46,9 @@ def createTables():
 def selectDb(limit=10, nolim=False,debug=False):
     try:
         if limit:
-            allPastes = Pastes.select().order_by(Pastes.Id.desc()).limit(limit)
+            allPastes = Pastes.select().order_by(Pastes.TimeStamp.desc()).limit(limit)
         else:
-            allPastes = Pastes.select().order_by(Pastes.Id.desc())
+            allPastes = Pastes.select().order_by(Pastes.TimeStamp.desc())
         if debug:
             printPastes(allPastes)
         return allPastes
