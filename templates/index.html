@@ -6,18 +6,29 @@
         .important { color: #333333; }
     </style>
 {% endblock %}
-{% block content %}
+{% block MainDiv %}
+  <script>
+        $(document).ready(function(){
+            $.get("/api/selectDb", function(data, status){
+                console.log(data);
+                for (var i in data["pastes"]){
+                    var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
+        <div style="overflow-wrap:break-word;">
+            ${data["pastes"][i]['Name']}
+        </div></a>`;
+                    console.log(idDiv);
+                    $("#lPanel").append(idDiv);
+                };
+            });
+        });
+    </script>
 
-    <div style="overflow-y: auto; overflow-x: hidden; width:100%" class="align-items-center">
-      {% for paste in pastes %}
-         <a href="/showPaste/{{paste.Id}}">
-             <div class="row">
-                  <div class="col-*-* row h-100 justify-content-center align-items-center " style="width:100%">
-                     <h3>{{ paste.name }}</h3>
-                  </div>
-             </div>
-         </a>
-      {% endfor %}
-    <!-- </p> -->
+    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
+      <div class="container text-center">
+          </br></br></br>
+          <div class="post-preview" id="lPanel" >
+          </div>
+          </br></br>
+      </div>
     </div>
 {% endblock %}

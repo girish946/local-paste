@@ -3,16 +3,18 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block content %}
+{% block MainDiv %}
 
-        <form action="/makeSearch/" method="POST" style="overflow-y: auto; overflow-x: hidden; width:70%">
-            Login<br>
+    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
+        <div class="container text-center">
+            </br></br></br>
             Username<br>
             <input type="text" name="username" style="width: 100%; background-color: white; color:green"><br>
             Password<br>
             <input type="text" name="Password" style="width: 100%; background-color: white; color:green"><br>
             <input type="submit" value="Send">
             <input type="reset" value="Clear">
-        </form>
+        </div>
+    </div>
 
 {% endblock %}

@@ -3,13 +3,8 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block content %}
-
-<div style="width:100%; height:100vh">
-	<!-- <textarea class="h-100 w-100" rows=10>{{content}}</textarea> 
-     <iframe src="/api/get/{{pasteId}}" style="height:100%; width:100%"></iframe> -->
-
-     <script >
+{% block MainDiv %}
+        <script >
             $(document).ready(function(){  
                   $.ajax({
                     'url' : '/api/get/{{pasteId}}',
@@ -17,14 +12,16 @@
                     'crossDomain':true,
                     'success' : function(data) {
                         console.log(data);
-                        $('#canv').append('</br></br><div>'+ data['Name']+'</br>'+ data['Content']+'</br>'+ data['Id']+''+'</div></hr>');       
+                        $('#canv').append(data['Content']);       
                         }
                     });
                   });
         </script>
-        <div id="canv" style="height:100%; width:100%">
-            
+    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
+      <div class="container">
+            </br></br></br>
+            <div id="canv" style="height:100%; width:100%">  
+            </div>
         </div>
-</div>
-
+    </div>
 {% endblock %}

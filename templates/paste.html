@@ -3,10 +3,11 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block content %}
+{% block MainDiv %}
     
         <script >
             $(document).ready(function(){  
+            {% if pasteId %}
                 $.ajax({
 
                     'url' : '/api/get/{{pasteId}}',
@@ -19,7 +20,7 @@
                         $("#PasteContent").val(data["Content"]);
                         }
                     });
-
+            {% endif %}
                 $('#submit').click(function() {
                         var data = JSON.stringify(
                              {
@@ -29,33 +30,45 @@
                             });
 
                         $.ajax({
+                            {% if pasteId%}
                             'url' : '/api/update/'+$("#PasteId").val(),
+                            {%else%}
+                            'url' : '/api/new',
+                            {%endif%}
                             'type' : 'PUT',
                             'crossDomain':true,
                             'contentType': "application/json",
                             'dataType': 'json',
                             'data': data,
                             'success' : function(data) {
-                                window.location.replace("/showPaste/"+$("#PasteId").val());
+                                {% if pasteId%}
+                                    window.location.replace("/showPaste/"+$("#PasteId").val());
+                                {%else%}
+                                    window.location.replace("/");
+                                {%endif%}
                              }
                          });
                     });
                 });
         </script>
-
-        <form action="{{action}}" method="post" style="overflow-y: auto; overflow-x: hidden; width:70%">
-        	{% if updatePaste %}
-        	<input type="text" name="PasteId" id="PasteId" style="width: 100%; background-color: white; color:green" value="{{pasteId}}"  hidden ><br>
-        	{% endif %}
-            Paste name<br>
-            <input type="text" name="PasteName" id="PasteName" style="width: 100%; background-color: white; color:green"
+        <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
+            <div class="container text-center">
+            </br></br></br>
+                <form action="{{action}}" method="post" style="overflow-y: auto; overflow-x: hidden; width:100%">
+        	        {% if updatePaste %}
+                	<input type="text" name="PasteId" id="PasteId" style="width: 100%; background-color: white; color:green" value="{{pasteId}}"  hidden ><br>
+                	{% endif %}
+                    Paste name<br>
+                    <input type="text" name="PasteName" id="PasteName" style="width: 100%; background-color: white; color:green"
             ><br>
 
-            PasteContent<br>
-            <textarea name="PasteContent" id="PasteContent" style="width: 100%; background-color: white; color:green" rows=11>
-            </textarea><br>
+                    PasteContent<br>
+                    <textarea name="PasteContent" id="PasteContent" style="width: 100%; background-color: white; color:green" rows=11>
+                    </textarea><br>
             
-            <input type="button" id="submit" value="submit"/>
-            <input type="reset" value="Clear">
-        </form>
+                    <input type="button" id="submit" value="submit"/>
+                    <input type="reset" value="Clear">
+                </form>
+            </div>
+        </div>
 {% endblock %}

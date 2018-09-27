@@ -3,13 +3,39 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block content %}
+{% block MainDiv %}
+  <script>
+        $(document).ready(function(){
+        	$("#submit").click(function(){
+        		var keyword =$("#keyword").val();
+        	    var url = "/api/search/"+keyword;
+        	    console.log(url);
+                $.get(url, function(data, status){
+                    console.log(data);
+                    for (var i in data[keyword]){
+                        var idDiv = `<a href="/showPaste/${data[keyword][i]['Id']}">
+                        <div style="overflow-wrap:break-word;">
+                        ${data[keyword][i]['Name']}
+                        </div></a>`;
+                        console.log(idDiv);
+                        $("#lPanel").append(idDiv);
+                    };
+                });
+        	});
+        });
+    </script>
 
-        <form action="/makeSearch/" method="POST" style="overflow-y: auto; overflow-x: hidden; width:70%">
+    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
+        <div class="container text-center">
+            </br></br></br>
             Search<br>
-            <input type="text" name="keyword" style="width: 100%; background-color: white; color:green"><br>
-            <input type="submit" value="Send">
+            <input type="text" id="keyword" name="keyword" style="width: 100%; background-color: white; color:green"><br>
+            <input type="submit" id="submit" value="Send">
             <input type="reset" value="Clear">
-        </form>
+            <div class="post-preview" id="lPanel" >
+            </div>
+            </br></br>
+        </div>
+    </div>
 
 {% endblock %}

@@ -7,20 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Local Paste Bin">
     <meta name="author" content="girish joshi">
-        <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/static/css/scrolling-nav.css" rel="stylesheet">
     <!-- Bootstrap core JavaScript -->
-    <script src="/static/js/jquery/jquery.min.js"></script>
-    <script src="/static/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="/static/js/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom JavaScript for this theme -->
     <script src="/static/js/scrolling-nav.js"></script>
+
+
         {% block head %}
 
         <title>{{ Title }} - LocalPaste</title>
@@ -58,12 +61,13 @@
     </nav>
 
 
-		<h1 class="bg-light text-success d-flex flex-column align-items-center">{{ Title }}</h1>
+		<!-- <h1 class="bg-light text-success d-flex flex-column align-items-center">{{ Title }}</h1>
         <div id="content" class="bg-light text-success d-flex flex-column align-items-center" style="height:75vh; width:100%">
           {% block content %}{% endblock %}
-        </div>
+        </div> -->
+        {% block MainDiv %}{% endblock %}
 
-            <!-- Footer -->
+    <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
        <!-- <p class="m-0 text-center text-white">Copyright &copy; <a href="http://girishjoshi.io">GirishJoshi 2018</a></p> -->

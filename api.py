@@ -58,7 +58,7 @@ class GetPaste(Resource):
 
 
 class SearchPaste(Resource):
-    def get(self, keyword):
+    def get(self, keyword=None):
         pastes = [{"Id": i.Id.hex, "Name": i.Name,
                    "Content": i.Content,
                    "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
@@ -66,6 +66,10 @@ class SearchPaste(Resource):
                      for i in searchPaste(keyword=keyword)
                   ]
         return {keyword: pastes}
+
+    def post(self):
+        keyword = request.form['keyword']
+        return self.get(keyword=keyword)
 
 
 class SelectDb(Resource):
@@ -84,6 +88,6 @@ api.add_resource(NewPaste,    '/api/new')
 api.add_resource(DeletePaste, '/api/delete/<string:pasteId>')
 api.add_resource(UpdatePaste, '/api/update/<string:pasteId>')
 api.add_resource(GetPaste,    '/api/get/<string:pasteId>')
-api.add_resource(SearchPaste, '/api/search/<string:keyword>')
+api.add_resource(SearchPaste, '/api/search', methods=['POST'], endpoint='Search_post')
+api.add_resource(SearchPaste, '/api/search/<string:keyword>', methods=['GET'], endpoint='Search_get')
 api.add_resource(SelectDb,    '/api/selectDb')
-
