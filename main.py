@@ -46,6 +46,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", help="the db file", type=str)
+    parser.add_argument("--port", help="port: default=5000",
+                        type=int, default=5000)
     arg = parser.parse_args()
     # print(arg.db)
     if arg.db and arg.db.endswith(".db"):
@@ -54,4 +56,4 @@ if __name__ == "__main__":
             print("file exists")
             config["DB_FILE"] = arg.db
         print(config)
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=arg.port, debug=True)
