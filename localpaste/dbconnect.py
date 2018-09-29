@@ -48,11 +48,15 @@ def createTables():
 def selectDb(limit=10, nolim=False, debug=False):
     try:
         if limit:
-            allPastes = Pastes.select().order_by(
+            allPastes = Pastes.select().where(
+                        Pastes.Status == 1
+                        ).order_by(
                         Pastes.TimeStamp.desc()
                         ).limit(limit)
         else:
-            allPastes = Pastes.select().order_by(Pastes.TimeStamp.desc())
+            allPastes = Pastes.select().where(
+                        Pastes.Status == 1
+                        ).order_by(Pastes.TimeStamp.desc())
         if debug:
             printPastes(allPastes)
         return allPastes
@@ -99,23 +103,31 @@ def deletePaste(pasteId=None, debug=False):
     return True
 
 
-def updatePaste(pasteId=None, pasteName=None, pasteContent=None,
+def updatePaste(pasteId=None, delete=False,
+                pasteName=None, pasteContent=None,
                 fileName=None, debug=False):
     if pasteId:
-        try:
-            pid = Pastes.update(Name=pasteName,
-                                Content=pasteContent,
-                                FileName=fileName,
-                                TimeStamp=datetime.datetime.now()
-                                ).where(
-                                Pastes.Id == pasteId
-                                ).execute()
+        if not delete:
+            try:
+                pid = Pastes.update(Name=pasteName,
+                                    Content=pasteContent,
+                                    FileName=fileName,
+                                    TimeStamp=datetime.datetime.now()
+                                    ).where(
+                                    Pastes.Id == pasteId
+                                    ).execute()
 
-            if pid:
-                print(pid)
-
-        except Exception as e:
-            print(e)
+                if pid:
+                    print(pid)
+            except Exception as e:
+                print(e)
+        else:
+            try:
+                pid = Pastes.update(Status=0).where(
+                                    Pastes.Id == pasteId
+                                    ).execute()
+            except Exception as e:
+                print(e)
 
 
 def searchPaste(keyword=None, debug=False):
