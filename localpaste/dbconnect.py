@@ -98,7 +98,9 @@ def updatePaste(pasteId=None, pasteName=None, pasteContent=None,
         try:
             pid = Pastes.update(Name = pasteName,
                                 Content = pasteContent,
-                                FileName = fileName).where(
+                                FileName = fileName,
+                                TimeStamp= datetime.datetime.now()
+                                ).where(
                                 Pastes.Id == pasteId
                                 ).execute()
 

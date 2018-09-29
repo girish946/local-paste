@@ -12,6 +12,7 @@
                     'crossDomain':true,
                     'success' : function(data) {
                         console.log(data);
+                        document.title = data['Name']+"-LocalPaste";
                         //$('#canv').append(data['Content']);       
                         document.getElementById("canv").src = "data:text/plain;charset=utf-8," + escape(data['Content']);
                         }
