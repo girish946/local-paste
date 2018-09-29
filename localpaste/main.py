@@ -1,10 +1,11 @@
 #! python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, flash, redirect, render_template, request
-from flask import make_response
-from api import *
-from app_global import app, config
+from api import (DbInit, NewPaste, DeletePaste,
+                 UpdatePaste, GetPaste, SearchPaste,
+                 SelectDb)
+from flask import render_template
+from app_global import app, config, api
 import argparse
 import os
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
     parser.add_argument("--port", help="port: default=5000",
                         type=int, default=5000)
     arg = parser.parse_args()
+
     # print(arg.db)
     if arg.db and arg.db.endswith(".db"):
         print("swithing db to", arg.db)
@@ -56,4 +58,16 @@ if __name__ == "__main__":
             print("file exists")
             config["DB_FILE"] = arg.db
         print(config)
+
+    api.add_resource(DbInit,      '/api/CreateDb')
+    api.add_resource(NewPaste,    '/api/new')
+    api.add_resource(DeletePaste, '/api/delete/<string:pasteId>')
+    api.add_resource(UpdatePaste, '/api/update/<string:pasteId>')
+    api.add_resource(GetPaste,    '/api/get/<string:pasteId>')
+    api.add_resource(SearchPaste, '/api/search', methods=['POST'],
+                     endpoint='Search_post')
+    api.add_resource(SearchPaste, '/api/search/<string:keyword>',
+                     methods=['GET'], endpoint='Search_get')
+    api.add_resource(SelectDb,    '/api/selectDb')
+
     app.run(host="0.0.0.0", port=arg.port, debug=True)

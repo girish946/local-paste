@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from peewee import *
+from peewee import (SqliteDatabase, Model, CharField, UUIDField,
+                    DateTimeField, IntegerField,)
+from app_global import config
 import datetime
 import uuid
-from app_global import config
 
 
 db = SqliteDatabase(config["DB_FILE"])
@@ -21,12 +22,13 @@ class Users(LocalPaste):
 
 
 class Pastes(LocalPaste):
-   
-    Id = UUIDField(primary_key = True)
+
+    Id = UUIDField(primary_key=True)
     Name = CharField()
     Content = CharField()
     FileName = CharField()
     TimeStamp = DateTimeField(default=datetime.datetime.now)
+    Status = IntegerField(default=1)
 
 
 def printPastes(pastes):
@@ -43,10 +45,12 @@ def createTables():
     return True
 
 
-def selectDb(limit=10, nolim=False,debug=False):
+def selectDb(limit=10, nolim=False, debug=False):
     try:
         if limit:
-            allPastes = Pastes.select().order_by(Pastes.TimeStamp.desc()).limit(limit)
+            allPastes = Pastes.select().order_by(
+                        Pastes.TimeStamp.desc()
+                        ).limit(limit)
         else:
             allPastes = Pastes.select().order_by(Pastes.TimeStamp.desc())
         if debug:
@@ -85,7 +89,10 @@ def deletePaste(pasteId=None, debug=False):
     if pasteId:
         print("deleting ", pasteId)
         try:
-           delPaste = Pastes.delete().where(Pastes.Id==pasteId).execute()
+            delPaste = Pastes.delete().where(Pastes.Id == pasteId).execute()
+            if debug:
+                printPastes(delPaste)
+
         except Exception as e:
             print(e)
             return False
@@ -93,13 +100,13 @@ def deletePaste(pasteId=None, debug=False):
 
 
 def updatePaste(pasteId=None, pasteName=None, pasteContent=None,
-                fileName=None ,debug=False):
+                fileName=None, debug=False):
     if pasteId:
         try:
-            pid = Pastes.update(Name = pasteName,
-                                Content = pasteContent,
-                                FileName = fileName,
-                                TimeStamp= datetime.datetime.now()
+            pid = Pastes.update(Name=pasteName,
+                                Content=pasteContent,
+                                FileName=fileName,
+                                TimeStamp=datetime.datetime.now()
                                 ).where(
                                 Pastes.Id == pasteId
                                 ).execute()
@@ -115,7 +122,7 @@ def searchPaste(keyword=None, debug=False):
     if keyword:
         try:
             pastes = Pastes.select().order_by(Pastes.Id.desc()).where(
-                                   (Pastes.Name.contains(keyword))|
+                                   (Pastes.Name.contains(keyword)) |
                                    (Pastes.Content.contains(keyword)))
             if debug:
                 printPastes(pastes)
@@ -125,16 +132,15 @@ def searchPaste(keyword=None, debug=False):
             return False
 
 
-
 if __name__ == '__main__':
-    import sys
     import argparse
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("action", nargs='?', 
-                        help="Action: [select, insert, search, createDb, delete]")
-    parser.add_argument("--pasteId", default="1", 
+    parser.add_argument("action", nargs='?',
+                        help="\
+                        Action: [select, insert, search, createDb, delete]")
+    parser.add_argument("--pasteId", default="1",
                         help="sets the pasteId for operation", type=int)
     parser.add_argument("--keyword", help="Keyword for searching", type=str)
     parser.add_argument("--name", help="PasteName", type=str)
@@ -153,7 +159,7 @@ if __name__ == '__main__':
 
     if arg.keyword:
         if arg.action == 'search':
-            searchPaste(keyword = arg.keyword, debug=True)
+            searchPaste(keyword=arg.keyword, debug=True)
     else:
         if arg.action == 'select':
             selectDb(limit=arg.limit, debug=True)
@@ -172,4 +178,3 @@ if __name__ == '__main__':
 
         if arg.action == 'createDb':
             createTables()
-

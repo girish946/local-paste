@@ -1,41 +1,38 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from app_global import app, api
-from flask import request
-from flask_restful import Resource
 from dbconnect import (createTables, insertPaste, selectDb,
                        deletePaste, updatePaste, selectPaste,
                        searchPaste)
-import time
+from flask import request
+from flask_restful import Resource
+
 
 class DbInit(Resource):
     def get(self):
-        if CreateTables():
-            return {"CreateDb":"Success"}
+        if createTables():
+            return {"CreateDb": "Success"}
         else:
-            return {"CreateDb":"Failed"}
+            return {"CreateDb": "Failed"}
 
 
 class NewPaste(Resource):
-
     def put(self):
         name = request.json['name']
         content = request.json['content']
 
-        insertPaste(name = name, 
-                    content = content,
-                    filename = name+'.txt')
-        return {"insert":"success"}
+        insertPaste(name=name,
+                    content=content,
+                    filename=name+'.txt')
+        return {"insert": "success"}
 
 
 class DeletePaste(Resource):
-
     def delete(self, pasteId):
         if deletePaste(pasteId=pasteId):
-            return {"delete":"success"}
+            return {"delete": "success"}
         else:
-            return {"delete":"Failed"}
+            return {"delete": "Failed"}
 
 
 class UpdatePaste(Resource):
@@ -46,15 +43,15 @@ class UpdatePaste(Resource):
         updatePaste(pasteId=pasteId, pasteName=name,
                     pasteContent=content, fileName=name+".txt",
                     debug=True)
-        return {"ok":"done"}
+        return {"ok": "done"}
 
 
 class GetPaste(Resource):
     def get(self, pasteId):
         paste = [i for i in selectPaste(pasteId=pasteId)][0]
-        return {"Name":paste.Name, "Id": paste.Id.hex,
-                "Content":paste.Content,
-                "TimeStamp":paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
+        return {"Name": paste.Name, "Id": paste.Id.hex,
+                "Content": paste.Content,
+                "TimeStamp": paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
 
 
 class SearchPaste(Resource):
@@ -63,7 +60,7 @@ class SearchPaste(Resource):
                    "Content": i.Content,
                    "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
                    }
-                     for i in searchPaste(keyword=keyword)
+                  for i in searchPaste(keyword=keyword)
                   ]
         return {keyword: pastes}
 
@@ -78,16 +75,6 @@ class SelectDb(Resource):
                    "Content": i.Content,
                    "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
                    }
-                     for i in selectDb(limit=0)
+                  for i in selectDb(limit=0)
                   ]
         return {"pastes": pastes}
-
-
-api.add_resource(DbInit,      '/api/CreateDb')
-api.add_resource(NewPaste,    '/api/new')
-api.add_resource(DeletePaste, '/api/delete/<string:pasteId>')
-api.add_resource(UpdatePaste, '/api/update/<string:pasteId>')
-api.add_resource(GetPaste,    '/api/get/<string:pasteId>')
-api.add_resource(SearchPaste, '/api/search', methods=['POST'], endpoint='Search_post')
-api.add_resource(SearchPaste, '/api/search/<string:keyword>', methods=['GET'], endpoint='Search_get')
-api.add_resource(SelectDb,    '/api/selectDb')
