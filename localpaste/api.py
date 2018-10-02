@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from dbconnect import (createTables, insertPaste, selectDb,
+from .dbconnect import (createTables, insertPaste, selectDb,
                        deletePaste, updatePaste, selectPaste,
                        searchPaste)
 from flask import request

@@ -1,11 +1,11 @@
 #! python3
 # -*- coding: utf-8 -*-
 
-from api import (DbInit, NewPaste, DeletePaste,
+from .api import (DbInit, NewPaste, DeletePaste,
                  UpdatePaste, GetPaste, SearchPaste,
                  SelectDb)
 from flask import render_template
-from app_global import app, config, api
+from .app_global import app, config, api, getDb
 import argparse
 import os
 
@@ -46,22 +46,7 @@ def showLogin():
     return render_template("login.html", Title="Login")
 
 
-if __name__ == "__main__":
-
-    # Parse the arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--db", help="the db file", type=str)
-    parser.add_argument("--port", help="port: default=5000",
-                        type=int, default=5000)
-    arg = parser.parse_args()
-
-    # print(arg.db)
-    if arg.db and arg.db.endswith(".db"):
-        print("swithing db to", arg.db)
-        if os.path.exists(arg.db):
-            print("file exists")
-            config["DB_FILE"] = arg.db
-        print(config)
+def startServer(host="0.0.0.0", port=5000):
 
     # add the routes for all APIs.
     api.add_resource(DbInit,      '/api/CreateDb')
@@ -76,4 +61,4 @@ if __name__ == "__main__":
     api.add_resource(SelectDb,    '/api/selectDb')
 
     # Run the application.
-    app.run(host="0.0.0.0", port=arg.port, debug=True)
+    app.run(host=host, port=port, debug=True)

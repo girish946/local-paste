@@ -3,17 +3,17 @@
 
 from peewee import (SqliteDatabase, Model, CharField, UUIDField,
                     DateTimeField, IntegerField,)
-from app_global import config
+from .app_global import config, getDb
 import datetime
 import uuid
 
 
-db = SqliteDatabase(config["DB_FILE"])
+getDb()
 
 
 class LocalPaste(Model):
     class Meta:
-        database = db
+        database = config['db']
 
 
 class Users(LocalPaste):
