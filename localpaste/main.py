@@ -5,7 +5,7 @@ from api import (DbInit, NewPaste, DeletePaste,
                  UpdatePaste, GetPaste, SearchPaste,
                  SelectDb)
 from flask import render_template
-from app_global import app, config, api
+from app_global import app, config, api, getDb
 import argparse
 import os
 
@@ -61,6 +61,7 @@ if __name__ == "__main__":
         if os.path.exists(arg.db):
             print("file exists")
             config["DB_FILE"] = arg.db
+            getDb()
         print(config)
 
     # add the routes for all APIs.
