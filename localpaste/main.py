@@ -46,7 +46,7 @@ def showLogin():
     return render_template("login.html", Title="Login")
 
 
-def startServer(host="0.0.0.0", port=5000):
+def addResources():
 
     # add the routes for all APIs.
     api.add_resource(DbInit,      '/api/CreateDb')
@@ -60,5 +60,8 @@ def startServer(host="0.0.0.0", port=5000):
                      methods=['GET'], endpoint='Search_get')
     api.add_resource(SelectDb,    '/api/selectDb')
 
+
+def startServer(host="0.0.0.0", port=5000):
     # Run the application.
     app.run(host=host, port=port, debug=True)
+

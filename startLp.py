@@ -20,5 +20,6 @@ if __name__ == "__main__":
             app_global.getDb()
         print(app_global.config)
 
-    from localpaste.main import startServer
+    from localpaste.main import startServer, addResources
+    addResources()
     startServer(port=arg.port)
