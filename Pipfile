@@ -9,6 +9,7 @@ requests = "*"
 "flake8" = "*"
 peewee = "*"
 flask-restful = "*"
+gunicorn = "*"
 
 [dev-packages]
 

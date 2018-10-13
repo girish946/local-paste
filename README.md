@@ -13,7 +13,22 @@ $ python localpaste/dbconnect.py createDb
 
 ## Usage
 
+
 ```bash
-$ python main.py
+$ python startLp.py
+```
+Using gunicorn
+
+```bash
+$ gunicorn wsgi:app -b 0.0.0.0:8000 --workers=2
+```
+
+using Docker
+
+```bash
+# build the image
+$ sudo docker-compose -f docker-compose.yml build
+# run the docker container
+$ sudo docker-compose -f docker-compose.yml up
 ```
 
