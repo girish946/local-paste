@@ -47,9 +47,15 @@
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="/search">Search</a>
             </li>
+            {%if not 'username' in session%}
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="/login">Login</a>
             </li>
+            {%else%}
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/logout">Logout</a>
+            </li>
+            {%endif%}
             {%if pasteId %}
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="/pasteUpdate/{{pasteId}}">Edit This Paste</a>

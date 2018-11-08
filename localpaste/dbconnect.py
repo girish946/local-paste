@@ -4,8 +4,10 @@
 from peewee import (SqliteDatabase, Model, CharField, UUIDField,
                     DateTimeField, IntegerField,)
 from .app_global import config, getDb
+import hashlib, binascii
 import datetime
 import uuid
+
 
 
 getDb()
@@ -30,6 +32,10 @@ class Pastes(LocalPaste):
     TimeStamp = DateTimeField(default=datetime.datetime.now)
     Status = IntegerField(default=1)
 
+def printUsers(users):
+    for i in users:
+        print(i.username, i.Password)
+
 
 def printPastes(pastes):
     for i in pastes:
@@ -40,6 +46,8 @@ def createTables():
     try:
         db.connect()
         db.create_tables([Users, Pastes])
+        admin = Users.create(username="admin", Password="admin")
+        admin.save()
     except Exception as e:
         return False
     return True
@@ -142,6 +150,45 @@ def searchPaste(keyword=None, debug=False):
         except Exception as e:
             print(e)
             return False
+
+
+def createUser(username=None, Password=None, debug=False):
+    if username:
+        if Password:
+            try:
+                user = Users.create(username=username,
+                                    Password=Password)
+                user.save()
+                return True
+            except Exception as e:
+                print(e)
+                return False
+
+
+def getLogin(username=None, Password=None, debug=False):
+    if username:
+        if Password:
+            dk = hashlib.pbkdf2_hmac('sha256',
+                                      bytes(Password, 'utf-8'),
+                                      b'salt',
+                                      100000)
+            
+            print(binascii.hexlify(dk))
+            try:
+                user = Users.select().where(
+                        Users.username==username and
+                        Users.Password==Password)
+                # print(user)
+                if user:
+                    # print(user)
+                    config["admin_session"] =  uuid.uuid4().hex
+                    # print(config)
+                    if debug:
+                        printUsers(user)
+                    return True
+            except Exception as e:
+                print(e)
+                return False
 
 
 if __name__ == '__main__':

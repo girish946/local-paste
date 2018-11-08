@@ -3,9 +3,10 @@
 
 from .dbconnect import (createTables, insertPaste, selectDb,
                        deletePaste, updatePaste, selectPaste,
-                       searchPaste)
-from flask import request
+                       searchPaste, getLogin)
+from flask import request, session
 from flask_restful import Resource
+from .app_global import config
 
 
 class DbInit(Resource):
@@ -119,3 +120,36 @@ class SelectDb(Resource):
                   for i in selectDb(limit=0)
                   ]
         return {"pastes": pastes}
+
+class UserLogin(Resource):
+    """
+    user login
+    """
+    def post(self):
+        # print(request.json)
+        if "username" in request.json:
+            username = request.json["username"]
+            if "password" in request.json:
+                password = request.json["password"]
+                # print(request.json)
+                if getLogin(username, password):
+                    session['username'] = username
+                    session['token'] = config['admin_session']
+                    return {"login":"success",
+                             "token":config["admin_session"]}
+                else:
+                    return{"login": "failed"}
+
+class UserLogout(Resource):
+    """
+    user logout
+    """
+    def get(self):
+        if 'username' in session:
+            session.pop('username')
+            config.pop('admin_session')
+            print(session)
+            print(config)
+            return {"logout":"success"}
+        else:
+            return{"logout":"failed"}
