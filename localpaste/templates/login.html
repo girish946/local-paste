@@ -5,14 +5,40 @@
 {% endblock %}
 {% block MainDiv %}
 
+    <script>
+        $(document).ready(function(){  
+            $('#submit').click(function() {
+                        var data = JSON.stringify(
+                             {
+                                'username': $("#username").val(),
+                                'password': $("#password").val(),
+                            });
+
+                        $.ajax({
+                            'url' : '/api/login',
+                            'type' : 'POST',
+                            'contentType': "application/json",
+                            'dataType': 'json',
+                            'data': data,
+                            'success' : function(data) {
+                                console.log(data);
+                                alert("login"+data['login']);
+                                if(data['login']=='success'){
+                                    window.location.replace("/");
+                                }
+                             }
+                         });
+                    });
+        });
+    </script>
     <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
         <div class="container text-center">
             </br></br></br>
             Username<br>
-            <input type="text" name="username" style="width: 100%; background-color: white; color:green"><br>
+            <input type="text" id="username" name="username" style="width: 100%; background-color: white; color:green"><br>
             Password<br>
-            <input type="text" name="Password" style="width: 100%; background-color: white; color:green"><br>
-            <input type="submit" value="Send">
+            <input type="text" id="password" name="Password" style="width: 100%; background-color: white; color:green"><br>
+            <input type="button" id="submit" value="Send">
             <!-- <input type="reset" value="Clear"> -->
         </div>
     </div>
