@@ -113,14 +113,17 @@ class SelectDb(Resource):
     curl http://localhost:5000/api/selectDb
     """
     def get(self):
-        pastes = [{"Id": i.Id.hex, "Name": i.Name,
-                   "Content": i.Content,
-                   "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
-                   }
-                  for i in selectDb(limit=0)
-                  ]
-        return {"pastes": pastes}
-
+        try:
+            pastes = [{"Id": i.Id.hex, "Name": i.Name,
+                    "Content": i.Content,
+                    "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
+                    }
+                    for i in selectDb(limit=0)
+                    ]
+            return {"pastes": pastes}
+        except Exception as e:
+            return {"Error": str(e)}
+         
 class UserLogin(Resource):
     """
     user login

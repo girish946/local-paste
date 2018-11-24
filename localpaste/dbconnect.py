@@ -3,6 +3,7 @@
 
 from peewee import (SqliteDatabase, Model, CharField, UUIDField,
                     DateTimeField, IntegerField,)
+from peewee import OperationalError
 from .app_global import config, getDb
 import hashlib, binascii
 import datetime
@@ -44,6 +45,7 @@ def printPastes(pastes):
 
 def createTables():
     try:
+        db = config['db']
         db.connect()
         db.create_tables([Users, Pastes])
         admin = Users.create(username="admin", Password="admin")
@@ -68,6 +70,8 @@ def selectDb(limit=10, nolim=False, debug=False):
         if debug:
             printPastes(allPastes)
         return allPastes
+    except OperationalError as oe:
+        raise Exception("No Table pastes")
     except Exception as e:
         return False
 
