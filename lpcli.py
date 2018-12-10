@@ -16,10 +16,7 @@ def GetPaste(pasteId):
 
 def AddNewPaste(pasteName,pasteContent):
     try:       
-       print(pasteName,pasteContent)
        pasteDetails={'name':pasteName,'content':pasteContent}
-       print(pasteDetails)
-       #print(clipboard.paste())
        r=requests.put(url+"api/new",json=pasteDetails)
        print(r.status_code)
        if r.status_code == 200:
@@ -29,13 +26,19 @@ def AddNewPaste(pasteName,pasteContent):
 
     except Exception as e:
        if debug:
-            print(e, e.message) 
+           print(e, e.message) 
 
 def UpdateAPaste(pasteId,pasteContent):
     print(pasteId,pasteContent)
 
 def DeleteAPaste(pasteId):
-    print(pasteId)
+    try:
+        print("inside try")
+        r=requests.delete(url+"api/delete/"+pasteId)
+        print(r.status_code)
+    except Exception as e:
+        if debug:
+            print(e, e.message)   
 
 def SearchAPasteById(pasteID):
     print(pasteId)   
@@ -50,7 +53,7 @@ if __name__ == '__main__':
                         Action: [select, insert, search, createDb, delete]")
     parser.add_argument("--pasteId", default="1",
                         help="sets the pasteId for operation", required=False)
-    #parser.add_argument("--keyword", help="Keyword for searching", type=str, required=False)
+    parser.add_argument("--keyword", help="Keyword for searching", type=str, required=False)
     parser.add_argument("--pname", help="PasteName", type=str, required=False, nargs='+')
     parser.add_argument("--pcontent", help="PasteContent", type=str, required=False,nargs='+')
     #parser.add_argument("--fileName", help="PasteFilename", type=str, required=False)
@@ -60,9 +63,12 @@ if __name__ == '__main__':
 
     if arg.pasteId:
         if arg.action == 'select':
-            print("here")
-            #GetPaste(pasteId=arg.pasteId)
             GetPaste(arg.pasteId)
-            #AddNewPaste("here","this is new paste")
+        if arg.action=='delete':
+            DeleteAPaste(arg.pasteId)    
+           
     if arg.action=='insert':
-        AddNewPaste(' '.join(arg.pname),' '.join(arg.pcontent))#(arg.pname,arg.pcontent)# ' '.join(args.string)
+        if arg.pname:
+            AddNewPaste(' '.join(arg.pname),' '.join(arg.pcontent))
+        else:
+            print("paste should have a name")    
