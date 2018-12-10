@@ -30,6 +30,8 @@ class NewPaste(Resource):
     http://localhost:5000/api/new
     """
     def put(self):
+        print("this is request", request)
+        print("this is request.json",request.json)
         name = request.json['name']
         content = request.json['content']
 
