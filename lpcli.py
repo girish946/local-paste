@@ -40,17 +40,52 @@ def DeleteAPaste(pasteId):
         if debug:
             print(e, e.message)   
 
-def SearchAPasteById(pasteID):
-    print(pasteId)   
-
 def SearchAPasteByName(pasteName):
+    for i in pasteName:
+        res = requests.get(url+'api/search/'+i)
+        print(res.text)
+    """pasteList=GetAllPastes()
+    print("pname", pasteName)
+    for paste in pasteList:
+        #print(paste)
+        for i in paste:
+            #print(str(i["Name"].encode('utf-8')))
+
+            if pasteName[0] in  i["Name"] or pasteName[0] in i['Content']:
+                print(i['Id'])
+                for pasteDetail in paste:
+            if pasteName in pasteDetail:#str(pasteDetail['Name']).contains(pasteName):
+                print("ID  "+pasteDetail['Id']+"; Name  "+pasteDetail['Name'])"""
+
     print(pasteName)               
+
+def SearchAPasteByKeyword(keyword):
+    pasteList=GetAllPastes()
+    for paste in pasteList:
+        for pasteDetail in paste:
+            #print(type(str(pasteDetail['Name'])))
+            if str(pasteDetail['Name']).contains(keyword) and str(pasteDetail['content']).contains(keyword):
+                print("ID  "+pasteDetail['Id']+"; Name  "+pasteDetail['Name'])
+
+    print(keyword)
+
+def GetAllPastes():
+    r=requests.get(url+'api/selectDb')
+    pastesJson=json.loads(r.text)
+    return pastesJson.values()
+
+def ShowAllPastes():
+    pasteList=GetAllPastes()
+    for paste in pasteList:
+        for pasteDetail in paste:
+            print("ID  "+pasteDetail['Id']+"; Name  "+pasteDetail['Name'])
+        
 
 if __name__ == '__main__':
 	
     parser.add_argument("action", nargs='?',
                         help="\
-                        Action: [select, insert, search, createDb, delete]")
+                        Action: [select, insert, search, createDb, delete,showAll]")
     parser.add_argument("--pasteId", default="1",
                         help="sets the pasteId for operation", required=False)
     parser.add_argument("--keyword", help="Keyword for searching", type=str, required=False)
@@ -61,6 +96,19 @@ if __name__ == '__main__':
     #                    type=int, default=0)
     arg = parser.parse_args()
 
+    if arg.action=='showAll':
+        ShowAllPastes()
+
+    if arg.action=='search':
+        if arg.pname:
+            print("following pastes contain the pastename you entered please run \"python lpcli.py select --pasteId \" alongwith the pasteId in front of the paste\n")
+            SearchAPasteByName(arg.pname)
+
+        elif arg.keyword:
+            print("following pastes contain the keyword you entered please run \"python lpcli.py select --pasteId \" alongwith the pasteId in front of the paste\n")
+            SearchAPasteByKeyword(arg.keyword)    
+        else:
+            print("please enter paste name of keyword to serch the paste")      
     if arg.pasteId:
         if arg.action == 'select':
             GetPaste(arg.pasteId)
@@ -71,4 +119,4 @@ if __name__ == '__main__':
         if arg.pname:
             AddNewPaste(' '.join(arg.pname),' '.join(arg.pcontent))
         else:
-            print("paste should have a name")    
+            print("paste should have a name")
