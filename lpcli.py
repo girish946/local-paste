@@ -47,27 +47,22 @@ def SearchAPasteByName(pasteName):
     """pasteList=GetAllPastes()
     print("pname", pasteName)
     for paste in pasteList:
-        #print(paste)
         for i in paste:
-            #print(str(i["Name"].encode('utf-8')))
-
             if pasteName[0] in  i["Name"] or pasteName[0] in i['Content']:
                 print(i['Id'])
                 for pasteDetail in paste:
             if pasteName in pasteDetail:#str(pasteDetail['Name']).contains(pasteName):
                 print("ID  "+pasteDetail['Id']+"; Name  "+pasteDetail['Name'])"""
-
-    print(pasteName)               
+                  
 
 def SearchAPasteByKeyword(keyword):
-    pasteList=GetAllPastes()
-    for paste in pasteList:
-        for pasteDetail in paste:
-            #print(type(str(pasteDetail['Name'])))
-            if str(pasteDetail['Name']).contains(keyword) and str(pasteDetail['content']).contains(keyword):
-                print("ID  "+pasteDetail['Id']+"; Name  "+pasteDetail['Name'])
-
-    print(keyword)
+    r=requests.get(url+'/api/search/'+keyword)
+    pastesJson=json.loads(r.text)
+   
+    for paste in pastesJson.values():
+        for col in paste:
+            print (col['Id']+"\t"+col['Name'])
+    
 
 def GetAllPastes():
     r=requests.get(url+'api/selectDb')
@@ -102,10 +97,12 @@ if __name__ == '__main__':
     if arg.action=='search':
         if arg.pname:
             print("following pastes contain the pastename you entered please run \"python lpcli.py select --pasteId \" alongwith the pasteId in front of the paste\n")
+            print("ID\t\t\t\t\tPaste Name")
             SearchAPasteByName(arg.pname)
 
         elif arg.keyword:
             print("following pastes contain the keyword you entered please run \"python lpcli.py select --pasteId \" alongwith the pasteId in front of the paste\n")
+            print("ID\t\t\t\t\tPaste Name")
             SearchAPasteByKeyword(arg.keyword)    
         else:
             print("please enter paste name of keyword to serch the paste")      
