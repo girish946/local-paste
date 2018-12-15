@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .dbconnect import (createTables, insertPaste, selectDb,
-                       deletePaste, updatePaste, selectPaste,
-                       searchPaste, getLogin)
+                        deletePaste, updatePaste, selectPaste,
+                        searchPaste, getLogin)
 from flask import request, session
 from flask_restful import Resource
 from .app_global import config
@@ -30,8 +30,6 @@ class NewPaste(Resource):
     http://localhost:5000/api/new
     """
     def put(self):
-        print("this is request", request)
-        print("this is request.json",request.json)
         name = request.json['name']
         content = request.json['content']
 
@@ -84,11 +82,13 @@ class GetPaste(Resource):
     curl http://localhost:5000/api/get/<pasteId>
     """
     def get(self, pasteId):
-        paste = [i for i in selectPaste(pasteId=pasteId)][0]
-        return {"Name": paste.Name, "Id": paste.Id.hex,
-                "Content": paste.Content,
-                "TimeStamp": paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
-
+        paste = [i for i in selectPaste(pasteId=pasteId)]
+        if paste:
+            return {"Name": paste[0].Name, "Id": paste[0].Id.hex,
+                    "Content": paste[0].Content,
+                    "TimeStamp": paste[0].TimeStamp.strftime("%b %d %Y %H:%M:%S")}
+        else:
+            return {"Error": "No such paste"}
 
 class SearchPaste(Resource):
     """
@@ -117,15 +117,16 @@ class SelectDb(Resource):
     def get(self):
         try:
             pastes = [{"Id": i.Id.hex, "Name": i.Name,
-                    "Content": i.Content,
-                    "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
-                    }
-                    for i in selectDb(limit=0)
-                    ]
+                       "Content": i.Content,
+                       "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
+                       }
+                      for i in selectDb(limit=0)
+                      ]
             return {"pastes": pastes}
         except Exception as e:
             return {"Error": str(e)}
-         
+
+
 class UserLogin(Resource):
     """
     user login
@@ -140,10 +141,11 @@ class UserLogin(Resource):
                 if getLogin(username, password):
                     session['username'] = username
                     session['token'] = config['admin_session']
-                    return {"login":"success",
-                             "token":config["admin_session"]}
+                    return {"login": "success",
+                            "token": config["admin_session"]}
                 else:
                     return{"login": "failed"}
+
 
 class UserLogout(Resource):
     """
@@ -155,6 +157,6 @@ class UserLogout(Resource):
             config.pop('admin_session')
             print(session)
             print(config)
-            return {"logout":"success"}
+            return {"logout": "success"}
         else:
-            return{"logout":"failed"}
+            return{"logout": "failed"}

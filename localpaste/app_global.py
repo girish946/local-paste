@@ -15,5 +15,6 @@ config = {
     "admin_session": None
 }
 
+
 def getDb():
     config['db'] = SqliteDatabase(config["DB_FILE"])
