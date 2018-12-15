@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from .api import (DbInit, NewPaste, DeletePaste,
-                 UpdatePaste, GetPaste, SearchPaste,
-                 SelectDb, UserLogin, UserLogout)
+                  UpdatePaste, GetPaste, SearchPaste,
+                  SelectDb, UserLogin, UserLogout)
 from flask import render_template, redirect, session
 from .app_global import app, config, api, getDb
-import argparse
-import os
 
 
 # This file is used for starting the application on the local machie and
@@ -45,6 +43,7 @@ def index():
 def showLogin():
     return render_template("login.html", Title="Login")
 
+
 @app.route("/logout")
 def doLogout():
     if 'username' in session:
@@ -53,6 +52,7 @@ def doLogout():
         # print(session)
         # print(config)
     return redirect("/")
+
 
 def addResources():
 
@@ -74,4 +74,3 @@ def addResources():
 def startServer(host="0.0.0.0", port=5000):
     # Run the application.
     app.run(host=host, port=port, debug=True)
-

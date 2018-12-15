@@ -5,12 +5,10 @@ from peewee import (SqliteDatabase, Model, CharField, UUIDField,
                     DateTimeField, IntegerField,)
 from peewee import OperationalError
 from .app_global import config, getDb
-import hashlib, binascii
+import hashlib
+import binascii
 import datetime
 import uuid
-
-
-
 getDb()
 
 
@@ -32,6 +30,7 @@ class Pastes(LocalPaste):
     FileName = CharField()
     TimeStamp = DateTimeField(default=datetime.datetime.now)
     Status = IntegerField(default=1)
+
 
 def printUsers(users):
     for i in users:
@@ -173,19 +172,19 @@ def getLogin(username=None, Password=None, debug=False):
     if username:
         if Password:
             dk = hashlib.pbkdf2_hmac('sha256',
-                                      bytes(Password, 'utf-8'),
-                                      b'salt',
-                                      100000)
-            
+                                     bytes(Password, 'utf-8'),
+                                     b'salt',
+                                     100000)
+
             print(binascii.hexlify(dk))
             try:
                 user = Users.select().where(
-                        Users.username==username and
-                        Users.Password==Password)
+                        Users.username == username and
+                        Users.Password == Password)
                 # print(user)
                 if user:
                     # print(user)
-                    config["admin_session"] =  uuid.uuid4().hex
+                    config["admin_session"] = uuid.uuid4().hex
                     # print(config)
                     if debug:
                         printUsers(user)
