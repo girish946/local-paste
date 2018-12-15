@@ -82,11 +82,13 @@ class GetPaste(Resource):
     curl http://localhost:5000/api/get/<pasteId>
     """
     def get(self, pasteId):
-        paste = [i for i in selectPaste(pasteId=pasteId)][0]
-        return {"Name": paste.Name, "Id": paste.Id.hex,
-                "Content": paste.Content,
-                "TimeStamp": paste.TimeStamp.strftime("%b %d %Y %H:%M:%S")}
-
+        paste = [i for i in selectPaste(pasteId=pasteId)]
+        if paste:
+            return {"Name": paste[0].Name, "Id": paste[0].Id.hex,
+                    "Content": paste[0].Content,
+                    "TimeStamp": paste[0].TimeStamp.strftime("%b %d %Y %H:%M:%S")}
+        else:
+            return {"Error": "No such paste"}
 
 class SearchPaste(Resource):
     """

@@ -77,7 +77,9 @@ def selectDb(limit=10, nolim=False, debug=False):
 
 def selectPaste(pasteId=None, debug=False):
     try:
-        p = Pastes.select().where(Pastes.Id == pasteId)
+        p = Pastes.select().where((Pastes.Id == pasteId) &
+                                  (Pastes.Status == 1)
+                                  )
         if debug:
             printPastes(p)
 
