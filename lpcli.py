@@ -22,8 +22,19 @@ def AddNewPaste(pasteName, pasteContent):
         print("error")
 
 
-def UpdateAPaste(pasteId, pasteContent):
-    print(pasteId, pasteContent)
+def UpdateAPaste(pasteId, pasteContent,append):
+    req = requests.get(url+"api/get/"+pasteId)
+    details=req.json()    
+    
+    
+    if pasteContent:
+        if append != True:
+            contentToUpdate=pasteContent
+        else:
+            contentToUpdate=details['Content']+" "+pasteContent 
+        pasteDetails = {'name': details['Name'], 'content': contentToUpdate}         
+        r=requests.put(url+"/api/update/"+pasteId,json=pasteDetails)
+       
 
 
 def DeleteAPaste(pasteId):
@@ -51,7 +62,7 @@ def ShowAllPastes():
 if __name__ == '__main__':
     parser.add_argument("action", nargs='?',
                         help="\
-                Action: [get, new, search, createDb, delete, showAll]")
+                Action: [get, new, search, createDb, delete, showAll,update]")
     parser.add_argument("--pasteId", default="1",
                         help="sets the pasteId for operation", required=False)
     parser.add_argument("--port", help="server port", default="8000")
@@ -62,6 +73,7 @@ if __name__ == '__main__':
                         required=False)
     parser.add_argument("--content", help="PasteContent", type=str,
                         required=False)
+    parser.add_argument("--append",required=False)
 
     arg = parser.parse_args()
 
@@ -83,6 +95,14 @@ if __name__ == '__main__':
     elif arg.action == 'delete':
         if arg.pasteId:
             DeleteAPaste(arg.pasteId)
+
+    elif arg.action == 'update':
+        print("inside update")
+        if arg.pasteId!="1":
+            print("there is some pasteid  "+arg.pasteId)
+            UpdateAPaste(arg.pasteId,arg.content,arg.append)
+        else:
+            print("Please provide paste id to update")    
 
     if arg.action == 'new':
         if arg.name and arg.content:
