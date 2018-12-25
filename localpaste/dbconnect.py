@@ -3,11 +3,12 @@
 
 from peewee import (SqliteDatabase, Model, CharField, UUIDField,
                     DateTimeField, IntegerField,)
+from peewee import OperationalError
 from .app_global import config, getDb
+import hashlib
+import binascii
 import datetime
 import uuid
-
-
 getDb()
 
 
@@ -31,6 +32,11 @@ class Pastes(LocalPaste):
     Status = IntegerField(default=1)
 
 
+def printUsers(users):
+    for i in users:
+        print(i.username, i.Password)
+
+
 def printPastes(pastes):
     for i in pastes:
         print(i.Id,  i.Name, i.Content, i.FileName, i.TimeStamp)
@@ -38,8 +44,11 @@ def printPastes(pastes):
 
 def createTables():
     try:
+        db = config['db']
         db.connect()
         db.create_tables([Users, Pastes])
+        admin = Users.create(username="admin", Password="admin")
+        admin.save()
     except Exception as e:
         return False
     return True
@@ -60,13 +69,17 @@ def selectDb(limit=10, nolim=False, debug=False):
         if debug:
             printPastes(allPastes)
         return allPastes
+    except OperationalError as oe:
+        raise Exception("No Table pastes")
     except Exception as e:
         return False
 
 
 def selectPaste(pasteId=None, debug=False):
     try:
-        p = Pastes.select().where(Pastes.Id == pasteId)
+        p = Pastes.select().where((Pastes.Id == pasteId) &
+                                  (Pastes.Status == 1)
+                                  )
         if debug:
             printPastes(p)
 
@@ -142,6 +155,45 @@ def searchPaste(keyword=None, debug=False):
         except Exception as e:
             print(e)
             return False
+
+
+def createUser(username=None, Password=None, debug=False):
+    if username:
+        if Password:
+            try:
+                user = Users.create(username=username,
+                                    Password=Password)
+                user.save()
+                return True
+            except Exception as e:
+                print(e)
+                return False
+
+
+def getLogin(username=None, Password=None, debug=False):
+    if username:
+        if Password:
+            dk = hashlib.pbkdf2_hmac('sha256',
+                                     bytes(Password, 'utf-8'),
+                                     b'salt',
+                                     100000)
+
+            print(binascii.hexlify(dk))
+            try:
+                user = Users.select().where(
+                        Users.username == username and
+                        Users.Password == Password)
+                # print(user)
+                if user:
+                    # print(user)
+                    config["admin_session"] = uuid.uuid4().hex
+                    # print(config)
+                    if debug:
+                        printUsers(user)
+                    return True
+            except Exception as e:
+                print(e)
+                return False
 
 
 if __name__ == '__main__':

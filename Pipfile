@@ -5,10 +5,11 @@ name = "pypi"
 
 [packages]
 flask = "*"
-requests = "*"
+requests = ">=2.20.0"
 "flake8" = "*"
 peewee = "*"
 flask-restful = "*"
+gunicorn = "*"
 
 [dev-packages]
 
