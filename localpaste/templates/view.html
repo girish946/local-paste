@@ -10,7 +10,6 @@
 
         <link rel="stylesheet" type="text/css"
                                href="/static/js/google-code-prettify/skins/sons-of-obsidian.css">
-        -->
 
         <style type="text/css">
             .operative { font-weight: bold; border: 1px solid yellow; }
@@ -21,28 +20,12 @@
             .prettyprint ol.linenums > li { list-style-type: decimal; }
         </style>
 
-        <script >
-            $(document).ready(function(){
-                  $.ajax({
-                    'url' : '/api/get/{{pasteId}}',
-                    'type' : 'GET',
-                    'crossDomain':true,
-                    'success' : function(data) {
-                        console.log(data);
-                        document.title = data['Name']+"-LocalPaste";
-
-                        $('#quine').text(data['Content']);
-                        }
-                    });
-                  });
-        </script>
     <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
       <div class="container">
             </br></br></br>
             <?prettify lang=markdown >
             <pre class="prettyprint linenums" id="quine" style="width:100%;
-                        height:100vh">
-           </pre>
+                        height:100vh">{{data.Content}}</pre>
         </div>
     </div>
 {% endblock %}

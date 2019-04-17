@@ -4,6 +4,7 @@
 from .api import (DbInit, NewPaste, DeletePaste,
                   UpdatePaste, GetPaste, SearchPaste,
                   SelectDb, UserLogin, UserLogout)
+from .dbconnect import selectPaste
 from flask import render_template, redirect, session
 from .app_global import app, config, api, getDb
 
@@ -13,7 +14,15 @@ from .app_global import app, config, api, getDb
 
 @app.route("/showPaste/<pasteId>")
 def showPost(pasteId):
-    return render_template("view.html", pasteId=pasteId)
+    paste = [i for i in selectPaste(pasteId=pasteId)]
+    if paste:
+        data = {"Name": paste[0].Name, "Id": paste[0].Id.hex,
+                "Content": paste[0].Content}
+        return render_template("view.html", pasteId=pasteId, data=data)
+
+    else:
+        data = {"Error": "No such paste"}
+        return render_template("view.html", pasteId=pasteId, data=data)
 
 
 @app.route("/new")
