@@ -39,6 +39,18 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
+        {%if pasteId %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle justify-content-center"
+              data-toggle="dropdown" href="#">PasteType</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Markdown</a>
+            <a class="dropdown-item" href="#">Python</a>
+            <a class="dropdown-item" href="#">C</a>
+          </div>
+        </li>
+        {%endif%}
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
