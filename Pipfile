@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = "*"
 requests = ">=2.20.0"
+Jinja2 = ">=2.10.1"
 "flake8" = "*"
 peewee = "*"
 flask-restful = "*"
