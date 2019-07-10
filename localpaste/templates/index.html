@@ -1,32 +1,66 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-    {{ super() }}
-    <style type="text/css">
-        .important { color: #333333; }
-    </style>
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #333333;
+    }
+</style>
 {% endblock %}
 {% block MainDiv %}
-  <script>
-        $(document).ready(function(){
-            $.get("/api/selectDb", function(data, status){
-                console.log(data);
-                for (var i in data["pastes"]){
-                    var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
+<script>
+    var limit  = 10;
+    var offset = 0;
+    var done   = false;
+</script>
+<script>
+    function getnextNPastes(lim, off) {
+        console.log(limit+":"+offset)
+        $.get("/api/selectNextX/" + lim + "/" + off, function (data, status) {
+            //console.log(data);
+            for (var i in data["pastes"]) {
+                var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
         <div style="overflow-wrap:break-word;">
             ${data["pastes"][i]['Name']}
         </div></a>`;
-                    console.log(idDiv);
-                    $("#lPanel").append(idDiv);
-                };
-            });
+                //console.log(idDiv);
+                $("#lPanel").append(idDiv);
+            };
         });
-    </script>
+    }
+   
+    $(document).ready(
+        function () {
+            $('#next').click(function () {
+                $('#lPanel').empty();
+                getnextNPastes(window.limit, window.offset);
+                window.offset = window.offset + 10;
+            });
 
-    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
-      <div class="container text-center" style="padding: 10%"; >
-          <div class="post-preview" id="lPanel" >
-          </div>
-      </div>
+            $('#prev').click(function () {
+                $('#lPanel').empty();
+                window.offset = window.offset - 10;
+                getnextNPastes(window.limit, window.offset);
+            });
+
+            getnextNPastes(window.limit, window.offset);
+            window.offset = window.offset+10;
+        });
+
+</script>
+
+<div class="bg-white text-primary " style="height: 81vh; overflow-y: auto;">
+    <div class="container text-center" style="padding: 10%" ;>
+        <div style="overflow-wrap:break-word;">
+            <button type="button" id="next">Next</button>
+        </div>
+        <div class="post-preview" id="lPanel">
+            
+        </div>
+        <div style="overflow-wrap:break-word;">
+            <button type="button" id="prev">Previous</button>
+        </div>
     </div>
+</div>
 {% endblock %}

@@ -54,14 +54,14 @@ def createTables():
     return True
 
 
-def selectDb(limit=10, nolim=False, debug=False):
+def selectDb(limit=10, offset=0, nolim=False, debug=False):
     try:
         if limit:
             allPastes = Pastes.select().where(
                         Pastes.Status == 1
                         ).order_by(
                         Pastes.TimeStamp.desc()
-                        ).limit(limit)
+                        ).limit(limit).offset(offset)
         else:
             allPastes = Pastes.select().where(
                         Pastes.Status == 1

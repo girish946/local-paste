@@ -109,6 +109,23 @@ class SearchPaste(Resource):
         return self.get(keyword=keyword)
 
 
+class SelectNextX(Resource):
+    """
+    To select the next x pastes. The default is 10
+    """
+    def get(self, limit=10, offset=0):
+        try:
+            pastes = [{"Id": i.Id.hex, "Name": i.Name,
+                       "Content": i.Content,
+                       "TimeStamp": i.TimeStamp.strftime("%b %d %Y %H:%M:%S")
+                       }
+                      for i in selectDb(limit=limit, offset=offset)
+                      ]
+            return {"pastes": pastes}
+        except Exception as e:
+            return {"Error": str(e)}
+
+
 class SelectDb(Resource):
     """
     To retrive all pastes from the db.
