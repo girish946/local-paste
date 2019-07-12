@@ -10,22 +10,19 @@
 
         <link rel="stylesheet" type="text/css"
                                href="/static/js/google-code-prettify/skins/sons-of-obsidian.css">
-
-        <style type="text/css">
-            .operative { font-weight: bold; border: 1px solid yellow; }
-            #quine { border: 4px solid #88c; }
-        </style>
-
         <style>
             .prettyprint ol.linenums > li { list-style-type: decimal; }
         </style>
 
-    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto; padding-top: 4%">
-      <div class="container">
-
-            <?prettify lang=markdown >
-            <pre class="prettyprint linenums" id="quine" style="width:100%;
-                        height:100%">{{data.Content}}</pre>
+        <div>
+            </br>
         </div>
-    </div>
+
+        <div class="w3-container" style="height: 100%; top: 5%;
+                   padding-top: 5vh; padding-bottom: 5vh; ">
+            <?prettify lang=markdown >
+                <pre class="prettyprint linenums"
+                    id="quine" style="height: 100%;">{{data.Content}}</pre>
+        </div>
+
 {% endblock %}

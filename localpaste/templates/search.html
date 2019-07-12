@@ -9,15 +9,15 @@
         	$("#submit").click(function(){
         		var keyword =$("#keyword").val();
         	    var url = "/api/search/"+keyword;
-        	    console.log(url);
+
                 $.get(url, function(data, status){
-                    console.log(data);
+
                     for (var i in data[keyword]){
                         var idDiv = `<a href="/showPaste/${data[keyword][i]['Id']}">
                         <div style="overflow-wrap:break-word;">
                         ${data[keyword][i]['Name']}
                         </div></a>`;
-                        console.log(idDiv);
+
                         $("#lPanel").append(idDiv);
                     };
                 });
@@ -25,8 +25,12 @@
         });
     </script>
 
-    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
-        <div class="container text-center" style="padding: 10%";>
+    <div>
+        </br>
+    </div>
+    <div class="text-primary" style="height: 81vh; overflow-y: auto;">
+        <div class="container text-center" style="height: 76%; top: 5%;
+                    padding-top: 5vh; padding-bottom: 5vh;">
 
             Search<br>
             <input type="text" id="keyword" name="keyword" style="width: 100%; background-color: white; color:green"><br>

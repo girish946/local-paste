@@ -21,7 +21,6 @@
                             'dataType': 'json',
                             'data': data,
                             'success' : function(data) {
-                                console.log(data);
                                 alert("login"+data['login']);
                                 if(data['login']=='success'){
                                     window.location.replace("/");
@@ -31,14 +30,18 @@
                     });
         });
     </script>
-    <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
-        <div class="container text-center" style="padding: 10%";>
+    <div>
+        </br>
+    </div>
+    <div class="text-primary" style="height: 81vh; overflow-y: auto;">
+        <div class="container text-center" style="height: 76%; top: 5%;
+                    padding-top: 5vh; padding-bottom: 5vh;">
             Username<br>
             <input type="text" id="username" name="username" style="width: 100%; background-color: white; color:green"><br>
             Password<br>
             <input type="password" id="password" name="Password" style="width: 100%; background-color: white; color:green"><br>
             <input type="submit" id="submit" value="Submit">
-            <!-- <input type="reset" value="Clear"> -->
+
         </div>
     </div>
 

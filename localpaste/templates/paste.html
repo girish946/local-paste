@@ -15,7 +15,7 @@
                     'crossDomain':true,
 
                     'success' : function(data) {
-                        console.log(data);
+
                         $("#PasteName").val(data["Name"]);
                         $("#PasteContent").val(data["Content"]);
                         }
@@ -51,8 +51,12 @@
                     });
                 });
         </script>
-        <div class="bg-white text-primary" style="height: 81vh; overflow-y: auto;">
-            <div class="container text-center" style="padding: 10%";>
+         <div>
+            </br>
+        </div>
+        <div class="text-primary" style="height: 81vh; overflow-y: auto;">
+            <div class="container text-center" style="height: 76%; top: 5%;
+            padding-top: 5vh; padding-bottom: 5vh;">
 
                 <form action="{{action}}" method="post" style="overflow-y: auto; overflow-x: hidden; width:100%">
         	        {% if updatePaste %}
@@ -65,7 +69,7 @@
                     PasteContent<br>
                    <textarea name="PasteContent" id="PasteContent" style="width: 100%; background-color: white; color:green" rows=11></textarea><br>
                     <input type="button" id="submit" value="submit"/>
-                    <!-- <input type="reset" value="Clear"> -->
+
                 </form>
             </div>
         </div>
