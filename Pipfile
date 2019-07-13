@@ -5,12 +5,14 @@ name = "pypi"
 
 [packages]
 flask = "*"
+urllib3 = ">=1.24.2"
 requests = ">=2.20.0"
 Jinja2 = ">=2.10.1"
 "flake8" = "*"
 peewee = "*"
 flask-restful = "*"
 gunicorn = "*"
+black = "==19.3b0"
 
 [dev-packages]
 

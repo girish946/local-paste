@@ -41,15 +41,17 @@
         </button>
 
         {%if pasteId %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle justify-content-center"
-              data-toggle="dropdown" href="#">PasteType</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Markdown</a>
-            <a class="dropdown-item" href="#">Python</a>
-            <a class="dropdown-item" href="#">C</a>
-          </div>
-        </li>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle justify-content-center"
+                  data-toggle="dropdown" href="#">PasteType</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Markdown</a>
+                <a class="dropdown-item" href="#">Python</a>
+                <a class="dropdown-item" href="#">C</a>
+              </div>
+            </li>
+        </ul>
         {%endif%}
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
@@ -78,21 +80,28 @@
       </div>
     </nav>
 
-
-		<!-- <h1 class="bg-light text-success d-flex flex-column align-items-center">{{ Title }}</h1>
-        <div id="content" class="bg-light text-success d-flex flex-column align-items-center" style="height:75vh; width:100%">
-          {% block content %}{% endblock %}
-        </div> -->
-        {% block MainDiv %}{% endblock %}
+    <script>
+      var prevScrollpos = window.pageYOffset;
+      window.onscroll = function() {
+      var currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+          document.getElementById("mainNav").style.top = "0";
+        } else {
+          document.getElementById("mainNav").style.top = "-60px";
+        }
+        prevScrollpos = currentScrollPos;
+      }
+      </script>
+      <div style="background: black; min-height: 100vh;">
+          {% block MainDiv %}{% endblock %}
+      </div>
 
     <!-- Footer -->
-    <footer class="fixed-bottom py-5 bg-dark">
+    <footer class="fixed-bottom py-3 bg-dark">
       <div class="container">
-       <!-- <p class="m-0 text-center text-white">Copyright &copy; <a href="http://girishjoshi.io">GirishJoshi 2018</a></p> -->
        <p class="m-0 text-center text-white"> Made with <span class="heart">❤</span> by <a href="http://girishjoshi.io">GirishJoshi</a></p>
       </div>
       <!-- /.container -->
-
     </footer>
     </body>
 </html>

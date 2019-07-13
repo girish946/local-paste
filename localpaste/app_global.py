@@ -9,12 +9,8 @@ from peewee import SqliteDatabase
 app = Flask(__name__)
 api = Api(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-config = {
-    "DB_FILE": 'db/localPaste.db',
-    "db": None,
-    "admin_session": None
-}
+config = {"DB_FILE": "db/localPaste.db", "db": None, "admin_session": None}
 
 
 def getDb():
-    config['db'] = SqliteDatabase(config["DB_FILE"])
+    config["db"] = SqliteDatabase(config["DB_FILE"])
