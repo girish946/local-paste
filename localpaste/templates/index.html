@@ -35,9 +35,11 @@
             });
 
             $('#prev').click(function () {
-                $('#lPanel').empty();
-                window.offset = window.offset - 20;
-                getnextNPastes(window.limit, window.offset);
+                if(window.offset >= 20){
+                    $('#lPanel').empty();
+                    window.offset = window.offset - 20;
+                    getnextNPastes(window.limit, window.offset);
+                }
             });
 
             getnextNPastes(window.limit, window.offset);
