@@ -5,6 +5,7 @@ from .dbconnect import (
     createTables,
     insertPaste,
     selectDb,
+    getRecordCount,
     deletePaste,
     updatePaste,
     selectPaste,
@@ -27,6 +28,18 @@ class DbInit(Resource):
             return {"CreateDb": "Success"}
         else:
             return {"CreateDb": "Failed"}
+
+
+class RecordCount(Resource):
+    def get(self):
+        try:
+            count = getRecordCount()
+            if not count == -1:
+                return {"count": count}
+            else:
+                return {"error": "Something went wrong"}
+        except Exception as e:
+            return {"error": "No table pastes"}
 
 
 class NewPaste(Resource):

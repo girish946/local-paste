@@ -7,6 +7,7 @@ from .api import (
     DeletePaste,
     UpdatePaste,
     GetPaste,
+    RecordCount,
     SearchPaste,
     SelectNextX,
     SelectDb,
@@ -88,6 +89,7 @@ def addResources():
     # add the routes for all APIs.
     api.add_resource(DbInit, "/api/CreateDb")
     api.add_resource(NewPaste, "/api/new")
+    api.add_resource(RecordCount, "/api/recordCount")
     api.add_resource(DeletePaste, "/api/delete/<string:pasteId>")
     api.add_resource(UpdatePaste, "/api/update/<string:pasteId>")
     api.add_resource(GetPaste, "/api/get/<string:pasteId>")

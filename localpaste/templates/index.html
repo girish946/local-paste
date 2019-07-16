@@ -8,40 +8,60 @@
 {% block MainDiv %}
 <script>
     var limit  = 20;
-    var offset = 0;
+    var CurrentOffset = 0;
     var done   = false;
+    var totalPasteCount = 0;
+    var count = 0;
 </script>
 <script>
-    function getnextNPastes(lim, off) {
+    function getnextNPastes(lim, off, n) {
+        getPasteCount();
+        var lim = lim;
+        var off = off;
+        if(n == 0){
+            off = off - lim;
+        }
         $.get("/api/selectNextX/" + lim + "/" + off, function (data, status) {
+            if(status == "success"){
+                if(data["pastes"].length > 0){
+                    $('#lPanel').empty();
+                    for (var i in data["pastes"]) {
+                        var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
+                            <div style="overflow-wrap:break-word; height: 30px;">
+                                ${data["pastes"][i]['Name']}
+                            </div></a>`;
+                        $("#lPanel").append(idDiv);
+                    };
+                }
+                window.count = data["pastes"].length;
+                if(n == 1){
+                    window.CurrentOffset = window.CurrentOffset + window.limit;
+                }else{
+                    window.CurrentOffset = window.CurrentOffset - window.limit;
+                }
+            }else{
+               window.count = -1;
+            }
+        });
+    }
 
-            for (var i in data["pastes"]) {
-                var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
-        <div style="overflow-wrap:break-word; height: 30px;">
-            ${data["pastes"][i]['Name']}
-        </div></a>`;
-
-                $("#lPanel").append(idDiv);
-            };
+    function getPasteCount(){
+        $.get("/api/recordCount", function (data, status){ 
+            window.totalPasteCount = data["count"];
         });
     }
    
     $(document).ready(
         function () {
             $('#next').click(function () {
-                $('#lPanel').empty();
-                getnextNPastes(window.limit, window.offset);
-                window.offset = window.offset + 20;
+                getnextNPastes(window.limit, window.CurrentOffset, 1);
             });
 
             $('#prev').click(function () {
-                $('#lPanel').empty();
-                window.offset = window.offset - 20;
-                getnextNPastes(window.limit, window.offset);
+                getnextNPastes(window.limit, window.CurrentOffset, 0);
             });
 
-            getnextNPastes(window.limit, window.offset);
-            window.offset = window.offset+20;
+            getnextNPastes(window.limit, window.CurrentOffset, 1);
         });
 
 </script>
