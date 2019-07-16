@@ -27,7 +27,7 @@
                     $('#lPanel').empty();
                     for (var i in data["pastes"]) {
                         var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
-                            <div style="overflow-wrap:break-word; height: 30px;">
+                            <div style="overflow-wrap:break-word;">
                                 ${data["pastes"][i]['Name']}
                             </div></a>`;
                         $("#lPanel").append(idDiv);
@@ -73,13 +73,14 @@
     <div class="container text-center" style="height: 76%; top: 5%;
                 padding-top: 5vh; padding-bottom: 5vh;">
         <div style="overflow-wrap:break-word;">
-            <button type="button" id="next">Next</button>
+            <button type="button" id="prev">Previous</button>
         </div>
+
         <div class="post-preview" id="lPanel">
             
         </div>
         <div style="overflow-wrap:break-word;">
-            <button type="button" id="prev">Previous</button>
+            <button type="button" id="next">Next</button>
         </div>
     </div>
 </div>
