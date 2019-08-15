@@ -4,6 +4,27 @@
     {{ super() }}
 {% endblock %}
 {% block MainDiv %}
+
+        <script>
+            function copyStringToClipboard (str) {
+                var el = document.createElement('textarea');
+                el.value = str;
+                el.setAttribute('readonly', '');
+                el.style = {position: 'absolute', left: '-9999px'};
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+
+            $(document).ready(function(){
+                $('#CopyPaste').click(function() {
+                    var paste_content = {{data.Content|tojson}};
+                    copyStringToClipboard(paste_content);
+                });
+            });
+
+        </script>
         <script
             src="/static/js/google-code-prettify/run_prettify.js"
         defer></script> 
