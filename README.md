@@ -10,6 +10,13 @@ $ cd local-paste
 $ pip install -r requirements.txt
 ```
 
+If you are using `pipenv`, the instructions are as follows.
+```bash
+$ git clone https://github.com/girish946/local-paste
+$ cd local-paste
+$ pipenv install
+```
+
 ## Usage
 
 
@@ -41,3 +48,27 @@ $ python testLP.py
 ```
 
 or go to `http://0.0.0.0:8000/api/CreateDb` from your browser.
+
+## Features
+
+* Create, Update, Search and Delete the pastes.
+* Syntax heighlighting while viewing a paste.
+* Copy the paste to clipboard from the gui.
+* REST API.
+* Can be hosted on a low power machine like (RaspberryPi/OrangePi).
+
+## TODO
+
+Please take a look at [Issues](https://github.com/girish946/local-paste/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement).
+For the TODO list.
+
+## Contributing.
+
+Bugs and feature requests can be made via [GitHub
+issues](https://github.com/girish946/local-paste/issues).
+
+Pull requests are also welcome via git.
+
+LocalPaste uses [the Black python code formatter](https://github.com/python/black)
+to keep coding style consistent; you may wish to have it installed to make pull
+requests easier.
