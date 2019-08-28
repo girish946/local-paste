@@ -1,5 +1,9 @@
 flask
-flask-restful
-peewee
+urllib3
 requests
+Jinja2
+peewee
+flask-restful
 gunicorn
+black
+pip

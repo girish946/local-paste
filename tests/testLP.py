@@ -9,7 +9,7 @@ def testCreateDb():
     print(res.json())
 
 def testCreatePaste():
-    res = r.put("http://localhost:8000/api/new",
+    res = r.put("http://0.0.0.0:8000/api/new",
                 json ={"name":"Initial Paste", "content":"Welcome to LocalPaste"}
                )
     print(res.json())
