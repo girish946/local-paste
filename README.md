@@ -31,11 +31,20 @@ $ gunicorn wsgi:app -b 0.0.0.0:8000 --workers=2
 
 using Docker
 
+You can build the docker image.
+
 ```bash
 # build the image
 $ sudo docker-compose -f docker-compose.yml build
 # run the docker container
 $ sudo docker-compose -f docker-compose.yml up
+```
+
+Or you can pull the docker image from [docker hub](https://hub.docker.com/r/girish946/local-paste)
+using
+
+```bash
+$ docker pull girish946/local-paste
 ```
 
 ## Settingup the tables and testing
