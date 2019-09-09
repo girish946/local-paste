@@ -7,6 +7,8 @@ LocalPaste is a lightweight pastebin which can be hosted on a RaspberryPi.
 ```bash
 $ git clone https://github.com/girish946/local-paste
 $ cd local-paste
+$ python3 -m venv env
+$ source env/bin/activate
 $ pip install -r requirements.txt
 ```
 
@@ -15,6 +17,7 @@ If you are using `pipenv`, the instructions are as follows.
 $ git clone https://github.com/girish946/local-paste
 $ cd local-paste
 $ pipenv install
+$ pipenv shell
 ```
 
 ## Usage
