@@ -14,6 +14,35 @@
     var count = 0;
 </script>
 <script>
+
+    function initDb(){
+        console.log("in the initDb");
+        $.get("/api/CreateDb", function(data, status){
+            if(status == "success"){
+                if("CreateDb" in data){
+                    if(data["CreateDb"] == "Success"){
+                        var pasteData = JSON.stringify(
+                             {
+                                'name': "Initial Paste",
+                                'content': "Welcome to LocalPaste",
+                            });
+                        $.ajax({
+                            'url' : '/api/new',
+                            'type' : 'PUT',
+                            'crossDomain':true,
+                            'contentType': "application/json",
+                            'dataType': 'json',
+                            'data': pasteData,
+                            'success' : function(data) {
+                                window.location.replace("/"); 
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
     function getnextNPastes(lim, off, n) {
         getPasteCount();
         var lim = lim;
@@ -23,6 +52,14 @@
         }
         $.get("/api/selectNextX/" + lim + "/" + off, function (data, status) {
             if(status == "success"){
+                if(!( "pastes" in data) && ("Error" in data)){
+                    var createDbDiv = `<a href="#" onclick="initDb();">
+                                      <div style="overflow-wrap:break-word;">
+                                      Initialize the database.
+                                      </div></a>`;
+                    $("#lPanel").append(createDbDiv);
+                    return;
+                }
                 if(data["pastes"].length > 0){
                     $('#lPanel').empty();
                     for (var i in data["pastes"]) {
