@@ -26,8 +26,7 @@ class DbInit(Resource):
     def get(self):
         if createTables():
             return {"CreateDb": "Success"}
-        else:
-            return {"CreateDb": "Failed"}
+        return {"CreateDb": "Failed"}
 
 
 class RecordCount(Resource):
@@ -36,8 +35,7 @@ class RecordCount(Resource):
             count = getRecordCount()
             if not count == -1:
                 return {"count": count}
-            else:
-                return {"error": "Something went wrong"}
+            return {"error": "Something went wrong"}
         except Exception as e:
             return {"error": "No table pastes"}
 
@@ -117,8 +115,7 @@ class GetPaste(Resource):
                 "Content": paste[0].Content,
                 "TimeStamp": paste[0].TimeStamp.strftime("%b %d %Y %H:%M:%S"),
             }
-        else:
-            return {"Error": "No such paste"}
+        return {"Error": "No such paste"}
 
 
 class SearchPaste(Resource):
@@ -203,8 +200,7 @@ class UserLogin(Resource):
                     session["username"] = username
                     session["token"] = config["admin_session"]
                     return {"login": "success", "token": config["admin_session"]}
-                else:
-                    return {"login": "failed"}
+        return {"login": "failed"}
 
 
 class UserLogout(Resource):
@@ -219,5 +215,4 @@ class UserLogout(Resource):
             print(session)
             print(config)
             return {"logout": "success"}
-        else:
-            return {"logout": "failed"}
+        return {"logout": "failed"}
