@@ -28,6 +28,7 @@ def showPost(pasteId):
     paste = [i for i in selectPaste(pasteId=pasteId)]
     if paste:
         data = {
+            "Status": "Success",
             "Name": paste[0].Name,
             "Id": paste[0].Id.hex,
             "Content": paste[0].Content,
@@ -35,12 +36,11 @@ def showPost(pasteId):
         return render_template(
             "view.html", Title=data["Name"], pasteId=pasteId, data=data
         )
-
-    else:
-        data = {"Error": "No such paste"}
-        return render_template(
-            "view.html", Title="No such paste", pasteId=pasteId, data=data
-        )
+    data = {"Status":{"Error": "No such paste"},
+            "Content": None,
+            "Name": None}
+    return render_template(
+        "view.html", Title="No such paste", pasteId=pasteId, data=data)
 
 
 @app.route("/new")
@@ -110,4 +110,4 @@ def addResources():
 
 def startServer(host="0.0.0.0", port=5000):
     # Run the application.
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port)

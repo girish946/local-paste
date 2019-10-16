@@ -6,6 +6,7 @@
 {% block MainDiv %}
 
         <script>
+
             function copyStringToClipboard (str) {
                 var el = document.createElement('textarea');
                 el.value = str;
@@ -18,9 +19,21 @@
             }
 
             $(document).ready(function(){
+                {%if not data.Status == "Success"%}
+                    var error_msg = {{data.Status.Error|tojson}};
+                alert(error_msg);
+                {% endif %}
                 $('#CopyPaste').click(function() {
+
+            {%if data.Status == "Success"%}
                     var paste_content = {{data.Content|tojson}};
                     copyStringToClipboard(paste_content);
+            {%else%}
+
+                    var error_msg = {{data.Status.Error|tojson}};
+                    alert(error_msg);
+            {%endif%}
+
                 });
             });
 
@@ -41,9 +54,9 @@
 
         <div class="w3-container" style="height: 100%; top: 5%;
                    padding-top: 5vh; padding-bottom: 5vh; ">
-            <?prettify lang=markdown >
-                <pre class="prettyprint linenums"
-                    id="quine" style="height: 100%;">{{data.Content}}</pre>
+        {% if data["Status"] == "Success" %}
+<?prettify lang=markdown ><pre class="prettyprint linenums"id="quine" style="height: 100%;">{{data.Content}}</pre>
+        {% endif %}
         </div>
 
 {% endblock %}
