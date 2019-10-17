@@ -56,7 +56,7 @@ def createTables():
         db.create_tables([Users, Pastes])
         admin = Users.create(username="admin", Password="admin")
         admin.save()
-    except Exception as e:
+    except Exception:
         return False
     return True
 
@@ -112,7 +112,7 @@ def insertPaste(name="Untiteled", content=None, filename=None):
         uid = uuid.uuid4()
         p = Pastes.create(Id=uid, Name=name, Content=content, FileName=filename)
         p.save()
-    except Exception as e:
+    except Exception:
         return False
     return True
 
