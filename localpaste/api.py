@@ -33,7 +33,7 @@ class RecordCount(Resource):
     def get(self):
         try:
             count = getRecordCount()
-            if not count == -1:
+            if count != -1:
                 return {"count": count}
             return {"error": "Something went wrong"}
         except Exception as e:
