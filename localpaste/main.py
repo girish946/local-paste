@@ -36,11 +36,10 @@ def showPost(pasteId):
         return render_template(
             "view.html", Title=data["Name"], pasteId=pasteId, data=data
         )
-    data = {"Status":{"Error": "No such paste"},
-            "Content": None,
-            "Name": None}
+    data = {"Status": {"Error": "No such paste"}, "Content": None, "Name": None}
     return render_template(
-        "view.html", Title="No such paste", pasteId=pasteId, data=data)
+        "view.html", Title="No such paste", pasteId=pasteId, data=data
+    )
 
 
 @app.route("/new")

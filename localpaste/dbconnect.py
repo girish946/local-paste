@@ -85,7 +85,8 @@ def selectDb(limit=10, offset=0, debug=False):
     except Exception:
         return False
 
-def  getRecordCount():
+
+def getRecordCount():
     try:
         recCount = Pastes.select().count()
         return recCount
@@ -93,6 +94,7 @@ def  getRecordCount():
         raise Exception("No Table pastes")
     except Exception:
         return -1
+
 
 def selectPaste(pasteId=None, debug=False):
     try:
@@ -138,7 +140,7 @@ def updatePaste(
     pasteName=None,
     pasteContent=None,
     fileName=None,
-    debug=True
+    debug=True,
 ):
     if pasteId:
         if not delete:

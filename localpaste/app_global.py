@@ -16,6 +16,5 @@ else:
     config = {"DB_FILE": "db/localPaste.db", "db": None, "admin_session": None}
 
 
-
 def getDb():
     config["db"] = SqliteDatabase(config["DB_FILE"])
