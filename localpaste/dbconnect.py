@@ -137,7 +137,8 @@ def updatePaste(
     delete=False,
     pasteName=None,
     pasteContent=None,
-    fileName=None
+    fileName=None,
+    debug=True
 ):
     if pasteId:
         if not delete:
@@ -156,12 +157,14 @@ def updatePaste(
                 if pid:
                     print(pid)
             except Exception as e:
-                print(e)
+                if debug:
+                    print(e)
         else:
             try:
                 pid = Pastes.update(Status=0).where(Pastes.Id == pasteId).execute()
             except Exception as e:
-                print(e)
+                if debug:
+                    print(e)
 
 
 def searchPaste(keyword=None, debug=False):
