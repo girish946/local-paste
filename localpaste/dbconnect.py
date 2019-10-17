@@ -61,7 +61,7 @@ def createTables():
     return True
 
 
-def selectDb(limit=10, offset=0, nolim=False, debug=False):
+def selectDb(limit=10, offset=0, debug=False):
     try:
         if limit:
             allPastes = (
@@ -80,18 +80,18 @@ def selectDb(limit=10, offset=0, nolim=False, debug=False):
         if debug:
             printPastes(allPastes)
         return allPastes
-    except OperationalError as oe:
+    except OperationalError:
         raise Exception("No Table pastes")
-    except Exception as e:
+    except Exception:
         return False
 
-def  getRecordCount(debug=False):
+def  getRecordCount():
     try:
         recCount = Pastes.select().count()
         return recCount
-    except OperationalError as oe:
+    except OperationalError:
         raise Exception("No Table pastes")
-    except Exception as e:
+    except Exception:
         return -1
 
 def selectPaste(pasteId=None, debug=False):
@@ -137,8 +137,7 @@ def updatePaste(
     delete=False,
     pasteName=None,
     pasteContent=None,
-    fileName=None,
-    debug=False,
+    fileName=None
 ):
     if pasteId:
         if not delete:
@@ -183,7 +182,7 @@ def searchPaste(keyword=None, debug=False):
             return False
 
 
-def createUser(username=None, Password=None, debug=False):
+def createUser(username=None, Password=None):
     if username:
         if Password:
             try:
