@@ -14,7 +14,7 @@ def ShowAllPastes():
     
 
 if __name__ == '__main__':
-	
+
     parser.add_argument("action", nargs='?',
                         help="\
                         Action: [select, insert, search, createDb, delete]")
@@ -34,4 +34,4 @@ if __name__ == '__main__':
         else:
             ShowAllPastes()
 
-	#GetPaste()
+    #GetPaste()
