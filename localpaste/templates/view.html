@@ -1,62 +1,225 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 {% block MainDiv %}
 
-        <script>
+<meta charset="utf-8" />
 
-            function copyStringToClipboard (str) {
-                var el = document.createElement('textarea');
-                el.value = str;
-                el.setAttribute('readonly', '');
-                el.style = {position: 'absolute', left: '-9999px'};
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-            }
+<link rel="stylesheet" href="/static/editor/lib/codemirror.css">
+<link rel="stylesheet" href="/static/editor/theme/3024-day.css">
+<link rel="stylesheet" href="/static/editor/theme/3024-night.css">
+<link rel="stylesheet" href="/static/editor/theme/abcdef.css">
+<link rel="stylesheet" href="/static/editor/theme/ambiance.css">
+<link rel="stylesheet" href="/static/editor/theme/ayu-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/ayu-mirage.css">
+<link rel="stylesheet" href="/static/editor/theme/base16-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/bespin.css">
+<link rel="stylesheet" href="/static/editor/theme/base16-light.css">
+<link rel="stylesheet" href="/static/editor/theme/blackboard.css">
+<link rel="stylesheet" href="/static/editor/theme/cobalt.css">
+<link rel="stylesheet" href="/static/editor/theme/colorforth.css">
+<link rel="stylesheet" href="/static/editor/theme/dracula.css">
+<link rel="stylesheet" href="/static/editor/theme/duotone-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/duotone-light.css">
+<link rel="stylesheet" href="/static/editor/theme/eclipse.css">
+<link rel="stylesheet" href="/static/editor/theme/elegant.css">
+<link rel="stylesheet" href="/static/editor/theme/erlang-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/gruvbox-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/hopscotch.css">
+<link rel="stylesheet" href="/static/editor/theme/icecoder.css">
+<link rel="stylesheet" href="/static/editor/theme/isotope.css">
+<link rel="stylesheet" href="/static/editor/theme/lesser-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/liquibyte.css">
+<link rel="stylesheet" href="/static/editor/theme/lucario.css">
+<link rel="stylesheet" href="/static/editor/theme/material.css">
+<link rel="stylesheet" href="/static/editor/theme/material-darker.css">
+<link rel="stylesheet" href="/static/editor/theme/material-palenight.css">
+<link rel="stylesheet" href="/static/editor/theme/material-ocean.css">
+<link rel="stylesheet" href="/static/editor/theme/mbo.css">
+<link rel="stylesheet" href="/static/editor/theme/mdn-like.css">
+<link rel="stylesheet" href="/static/editor/theme/midnight.css">
+<link rel="stylesheet" href="/static/editor/theme/monokai.css">
+<link rel="stylesheet" href="/static/editor/theme/moxer.css">
+<link rel="stylesheet" href="/static/editor/theme/neat.css">
+<link rel="stylesheet" href="/static/editor/theme/neo.css">
+<link rel="stylesheet" href="/static/editor/theme/night.css">
+<link rel="stylesheet" href="/static/editor/theme/nord.css">
+<link rel="stylesheet" href="/static/editor/theme/oceanic-next.css">
+<link rel="stylesheet" href="/static/editor/theme/panda-syntax.css">
+<link rel="stylesheet" href="/static/editor/theme/paraiso-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/paraiso-light.css">
+<link rel="stylesheet" href="/static/editor/theme/pastel-on-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/railscasts.css">
+<link rel="stylesheet" href="/static/editor/theme/rubyblue.css">
+<link rel="stylesheet" href="/static/editor/theme/seti.css">
+<link rel="stylesheet" href="/static/editor/theme/shadowfox.css">
+<link rel="stylesheet" href="/static/editor/theme/solarized.css">
+<link rel="stylesheet" href="/static/editor/theme/the-matrix.css">
+<link rel="stylesheet" href="/static/editor/theme/tomorrow-night-bright.css">
+<link rel="stylesheet" href="/static/editor/theme/tomorrow-night-eighties.css">
+<link rel="stylesheet" href="/static/editor/theme/ttcn.css">
+<link rel="stylesheet" href="/static/editor/theme/twilight.css">
+<link rel="stylesheet" href="/static/editor/theme/vibrant-ink.css">
+<link rel="stylesheet" href="/static/editor/theme/xq-dark.css">
+<link rel="stylesheet" href="/static/editor/theme/xq-light.css">
+<link rel="stylesheet" href="/static/editor/theme/yeti.css">
+<link rel="stylesheet" href="/static/editor/theme/idea.css">
+<link rel="stylesheet" href="/static/editor/theme/darcula.css">
+<link rel="stylesheet" href="/static/editor/theme/yonce.css">
+<link rel="stylesheet" href="/static/editor/theme/zenburn.css">
+<script src="/static/editor/lib/codemirror.js"></script>
+<script src="/static/editor/mode/javascript/javascript.js"></script>
+<script src="/static/editor/addon/selection/active-line.js"></script>
+<script src="/static/editor/addon/edit/matchbrackets.js"></script>
+<script src="/static/editor/mode/markdown/markdown.js"></script>
 
-            $(document).ready(function(){
-                {%if not data.Status == "Success"%}
-                    var error_msg = {{data.Status.Error|tojson}};
-                alert(error_msg);
-                {% endif %}
-                $('#CopyPaste').click(function() {
 
-            {%if data.Status == "Success"%}
-                    var paste_content = {{data.Content|tojson}};
-                    copyStringToClipboard(paste_content);
-            {%else%}
+<div class="text-primary" style="height: 90vh; overflow-y: auto;">
+    <div class="container " style="height: 100%; top: 5%;
+    padding-top: 5vh; padding-bottom: 5vh;">
 
-                    var error_msg = {{data.Status.Error|tojson}};
-                    alert(error_msg);
-            {%endif%}
+        <article>
+            <div>
+                </br>
+            </div>
+            <div>
+                </br>
+            </div>
+            <form><textarea id="code" name="code" style="height: 100%">{{data.Content}}</textarea>
 
-                });
-            });
+                <p>Select a theme: <select onchange="selectTheme()" id=select>
+                        <option selected>base16-dark</option>
+                        <option>3024-day</option>
+                        <option>3024-night</option>
+                        <option>abcdef</option>
+                        <option>ambiance</option>
+                        <option>ayu-dark</option>
+                        <option>ayu-mirage</option>
+                        <option>base16-dark</option>
+                        <option>base16-light</option>
+                        <option>bespin</option>
+                        <option>blackboard</option>
+                        <option>cobalt</option>
+                        <option>colorforth</option>
+                        <option>darcula</option>
+                        <option>dracula</option>
+                        <option>duotone-dark</option>
+                        <option>duotone-light</option>
+                        <option>eclipse</option>
+                        <option>elegant</option>
+                        <option>erlang-dark</option>
+                        <option>gruvbox-dark</option>
+                        <option>hopscotch</option>
+                        <option>icecoder</option>
+                        <option>idea</option>
+                        <option>isotope</option>
+                        <option>lesser-dark</option>
+                        <option>liquibyte</option>
+                        <option>lucario</option>
+                        <option>material</option>
+                        <option>material-darker</option>
+                        <option>material-palenight</option>
+                        <option>material-ocean</option>
+                        <option>mbo</option>
+                        <option>mdn-like</option>
+                        <option>midnight</option>
+                        <option>monokai</option>
+                        <option>moxer</option>
+                        <option>neat</option>
+                        <option>neo</option>
+                        <option>night</option>
+                        <option>nord</option>
+                        <option>oceanic-next</option>
+                        <option>panda-syntax</option>
+                        <option>paraiso-dark</option>
+                        <option>paraiso-light</option>
+                        <option>pastel-on-dark</option>
+                        <option>railscasts</option>
+                        <option>rubyblue</option>
+                        <option>seti</option>
+                        <option>shadowfox</option>
+                        <option>solarized dark</option>
+                        <option>solarized light</option>
+                        <option>the-matrix</option>
+                        <option>tomorrow-night-bright</option>
+                        <option>tomorrow-night-eighties</option>
+                        <option>ttcn</option>
+                        <option>twilight</option>
+                        <option>vibrant-ink</option>
+                        <option>xq-dark</option>
+                        <option>xq-light</option>
+                        <option>yeti</option>
+                        <option>yonce</option>
+                        <option>zenburn</option>
+                    </select>
+                </p>
+            </form>
+    </div>
+</div>
 
-        </script>
-        <script
-            src="/static/js/google-code-prettify/run_prettify.js"
-        defer></script> 
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        readOnly: 'nocursor'
+    });
+    editor.setSize("100%", "480");
+    var input = document.getElementById("select");
+    function selectTheme() {
+        var theme = input.options[input.selectedIndex].textContent;
+        editor.setOption("theme", theme);
+        location.hash = "#" + theme;
+        console.log(editor.getValue());
+    }
+    var choice = (location.hash && location.hash.slice(1)) ||
+        (document.location.search &&
+            decodeURIComponent(document.location.search.slice(1)));
+    if (choice) {
+        input.value = choice;
+        editor.setOption("theme", choice);
+    }
+    CodeMirror.on(window, "hashchange", function () {
+        var theme = location.hash.slice(1);
+        if (theme) { input.value = theme; selectTheme(); }
+    });
+    editor.setOption("theme", "base16-dark");
 
-        <link rel="stylesheet" type="text/css"
-                               href="/static/js/google-code-prettify/skins/sons-of-obsidian.css">
-        <style>
-            .prettyprint ol.linenums > li { list-style-type: decimal; }
-        </style>
+    function copyStringToClipboard(str) {
+        var el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style = { position: 'absolute', left: '-9999px' };
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    }
 
-        <div>
-            </br>
-        </div>
+    $(document).ready(function () {
+        {%if not data.Status == "Success" %}
+        var error_msg = {{ data.Status.Error| tojson
+    }};
+    alert(error_msg);
+    {% endif %}
+    $('#CopyPaste').click(function () {
 
-        <div class="w3-container" style="height: 100%; top: 5%;
-                   padding-top: 5vh; padding-bottom: 5vh; ">
-        {% if data["Status"] == "Success" %}
-<?prettify lang=markdown ><pre class="prettyprint linenums"id="quine" style="height: 100%;">{{data.Content}}</pre>
-        {% endif %}
-        </div>
+        {%if data.Status == "Success" %}
+        var paste_content = {{ data.Content| tojson
+    }};
+    copyStringToClipboard(paste_content);
+    {%else%}
+
+    var error_msg = {{ data.Status.Error| tojson}};
+    alert(error_msg);
+    {% endif %}
+
+        });
+    });
+
+</script>
+</article>
 
 {% endblock %}

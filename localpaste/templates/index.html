@@ -7,34 +7,34 @@
 {% endblock %}
 {% block MainDiv %}
 <script>
-    var limit  = 20;
+    var limit = 20;
     var CurrentOffset = 0;
-    var done   = false;
+    var done = false;
     var totalPasteCount = 0;
     var count = 0;
 </script>
 <script>
 
-    function initDb(){
+    function initDb() {
         console.log("in the initDb");
-        $.get("/api/CreateDb", function(data, status){
-            if(status == "success"){
-                if("CreateDb" in data){
-                    if(data["CreateDb"] == "Success"){
+        $.get("/api/CreateDb", function (data, status) {
+            if (status == "success") {
+                if ("CreateDb" in data) {
+                    if (data["CreateDb"] == "Success") {
                         var pasteData = JSON.stringify(
-                             {
+                            {
                                 'name': "Initial Paste",
                                 'content': "Welcome to LocalPaste",
                             });
                         $.ajax({
-                            'url' : '/api/new',
-                            'type' : 'PUT',
-                            'crossDomain':true,
+                            'url': '/api/new',
+                            'type': 'PUT',
+                            'crossDomain': true,
                             'contentType': "application/json",
                             'dataType': 'json',
                             'data': pasteData,
-                            'success' : function(data) {
-                                window.location.replace("/"); 
+                            'success': function (data) {
+                                window.location.replace("/");
                             }
                         });
                     }
@@ -47,12 +47,12 @@
         getPasteCount();
         var lim = lim;
         var off = off;
-        if(n == 0){
+        if (n == 0) {
             off = off - lim;
         }
         $.get("/api/selectNextX/" + lim + "/" + off, function (data, status) {
-            if(status == "success"){
-                if(!( "pastes" in data) && ("Error" in data)){
+            if (status == "success") {
+                if (!("pastes" in data) && ("Error" in data)) {
                     var createDbDiv = `<a href="#" onclick="initDb();">
                                       <div style="overflow-wrap:break-word;">
                                       Initialize the database.
@@ -60,7 +60,7 @@
                     $("#lPanel").append(createDbDiv);
                     return;
                 }
-                if(data["pastes"].length > 0){
+                if (data["pastes"].length > 0) {
                     $('#lPanel').empty();
                     for (var i in data["pastes"]) {
                         var idDiv = `<a href="/showPaste/${data["pastes"][i]['Id']}">
@@ -71,23 +71,23 @@
                     };
                 }
                 window.count = data["pastes"].length;
-                if(n == 1){
+                if (n == 1) {
                     window.CurrentOffset = window.CurrentOffset + window.limit;
-                }else{
+                } else {
                     window.CurrentOffset = window.CurrentOffset - window.limit;
                 }
-            }else{
-               window.count = -1;
+            } else {
+                window.count = -1;
             }
         });
     }
 
-    function getPasteCount(){
-        $.get("/api/recordCount", function (data, status){ 
+    function getPasteCount() {
+        $.get("/api/recordCount", function (data, status) {
             window.totalPasteCount = data["count"];
         });
     }
-   
+
     $(document).ready(
         function () {
             $('#next').click(function () {
@@ -114,7 +114,7 @@
         </div>
 
         <div class="post-preview" id="lPanel">
-            
+
         </div>
         <div style="overflow-wrap:break-word;">
             <button type="button" id="next">Next</button>

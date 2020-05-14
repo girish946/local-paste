@@ -1,109 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
+<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Local Paste Bin">
-    <meta name="author" content="girish joshi">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Local Paste Bin">
+  <meta name="author" content="girish joshi">
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/scrolling-nav.css" rel="stylesheet">
-    <!-- Bootstrap core JavaScript -->
-    <script src="/static/vendor/jquery/jquery.min.js"></script>
-    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom styles for this template -->
+  <link href="/static/css/scrolling-nav.css" rel="stylesheet">
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Plugin JavaScript -->
-    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom JavaScript for this theme -->
-    <script src="/static/js/scrolling-nav.js"></script>
+  <!-- Custom JavaScript for this theme -->
+  <script src="/static/js/scrolling-nav.js"></script>
 
 
-        {% block head %}
+  {% block head %}
 
-        <title>{{ Title }} - LocalPaste</title>
+  <title>{{ Title }} - LocalPaste</title>
 
-        {% endblock %}
-    </head>
+  {% endblock %}
+</head>
 
-    <body>
+<body>
 
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="/">LocalPaste</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="/">LocalPaste</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        {%if pasteId %}
+      {%if pasteId %}
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle justify-content-center" data-toggle="dropdown" href="#">PasteType</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Markdown</a>
+            <a class="dropdown-item" href="#">Python</a>
+            <a class="dropdown-item" href="#">C</a>
+          </div>
+        </li>
+      </ul>
+
+      <a id="CopyPaste" style="background-color:transparent; color:rgba(255,255,255,.5);" href="#">copy the paste</a>
+      {%endif%}
+      <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle justify-content-center"
-                  data-toggle="dropdown" href="#">PasteType</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Markdown</a>
-                <a class="dropdown-item" href="#">Python</a>
-                <a class="dropdown-item" href="#">C</a>
-              </div>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/new">Create New Paste</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/search">Search</a>
+          </li>
+          {%if not 'username' in session%}
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/login">Login</a>
+          </li>
+          {%else%}
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/logout">Logout</a>
+          </li>
+          {%endif%}
+          {%if pasteId %}
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/pasteUpdate/{{pasteId}}">Edit This Paste</a>
+          </li>
+          {%endif%}
         </ul>
-
-        <a id="CopyPaste" style="background-color:transparent; color:rgba(255,255,255,.5);" href="#" >copy the paste</a>
-        {%endif%}
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/new">Create New Paste</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/search">Search</a>
-            </li>
-            {%if not 'username' in session%}
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/login">Login</a>
-            </li>
-            {%else%}
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/logout">Logout</a>
-            </li>
-            {%endif%}
-            {%if pasteId %}
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/pasteUpdate/{{pasteId}}">Edit This Paste</a>
-            </li>
-            {%endif%}
-          </ul>
-        </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <script>
-      var prevScrollpos = window.pageYOffset;
-      window.onscroll = function() {
+  <script>
+    var prevScrollpos = window.pageYOffset;
+    window.onscroll = function () {
       var currentScrollPos = window.pageYOffset;
-        if (prevScrollpos > currentScrollPos) {
-          document.getElementById("mainNav").style.top = "0";
-        } else {
-          document.getElementById("mainNav").style.top = "-60px";
-        }
-        prevScrollpos = currentScrollPos;
+      if (prevScrollpos > currentScrollPos) {
+        document.getElementById("mainNav").style.top = "0";
+      } else {
+        document.getElementById("mainNav").style.top = "-60px";
       }
-      </script>
-      <div style="background: black; min-height: 100vh;">
-          {% block MainDiv %}{% endblock %}
-      </div>
+      prevScrollpos = currentScrollPos;
+    }
+  </script>
+  <div style="background: black; min-height: 100vh;">
+    {% block MainDiv %}{% endblock %}
+  </div>
 
-    <!-- Footer -->
-    <footer class="fixed-bottom py-3 bg-dark">
-      <div class="container">
-       <p class="m-0 text-center text-white"> Made with <span class="heart">❤</span> by <a href="http://girishjoshi.io">GirishJoshi</a></p>
-      </div>
-      <!-- /.container -->
-    </footer>
-    </body>
+  <!-- Footer -->
+  <footer class="fixed-bottom py-3 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white"> Made with <span class="heart">❤</span> by <a
+          href="http://girishjoshi.io">GirishJoshi</a></p>
+    </div>
+    <!-- /.container -->
+  </footer>
+</body>
+
 </html>

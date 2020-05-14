@@ -1,45 +1,45 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block head %}
-    {{ super() }}
+{{ super() }}
 {% endblock %}
 {% block MainDiv %}
-  <script>
-        $(document).ready(function(){
-        	$("#submit").click(function(){
-        		var keyword =$("#keyword").val();
-        	    var url = "/api/search/"+keyword;
+<script>
+    $(document).ready(function () {
+        $("#submit").click(function () {
+            var keyword = $("#keyword").val();
+            var url = "/api/search/" + keyword;
 
-                $.get(url, function(data, status){
+            $.get(url, function (data, status) {
 
-                    for (var i in data[keyword]){
-                        var idDiv = `<a href="/showPaste/${data[keyword][i]['Id']}">
+                for (var i in data[keyword]) {
+                    var idDiv = `<a href="/showPaste/${data[keyword][i]['Id']}">
                         <div style="overflow-wrap:break-word;">
                         ${data[keyword][i]['Name']}
                         </div></a>`;
 
-                        $("#lPanel").append(idDiv);
-                    };
-                });
-        	});
+                    $("#lPanel").append(idDiv);
+                };
+            });
         });
-    </script>
+    });
+</script>
 
-    <div>
-        </br>
-    </div>
-    <div class="text-primary" style="height: 81vh; overflow-y: auto;">
-        <div class="container text-center" style="height: 76%; top: 5%;
+<div>
+    </br>
+</div>
+<div class="text-primary" style="height: 81vh; overflow-y: auto;">
+    <div class="container text-center" style="height: 76%; top: 5%;
                     padding-top: 5vh; padding-bottom: 5vh;">
 
-            Search<br>
-            <input type="text" id="keyword" name="keyword" style="width: 100%; background-color: white; color:green"><br>
-            <input type="submit" id="submit" value="Send">
-            <input type="reset" value="Clear">
-            <div class="post-preview" id="lPanel" >
-            </div>
-            </br></br>
+        Search<br>
+        <input type="text" id="keyword" name="keyword" style="width: 100%; background-color: white; color:green"><br>
+        <input type="submit" id="submit" value="Send">
+        <input type="reset" value="Clear">
+        <div class="post-preview" id="lPanel">
         </div>
+        </br></br>
     </div>
+</div>
 
 {% endblock %}
