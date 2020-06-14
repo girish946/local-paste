@@ -1,15 +1,17 @@
 import requests as r
 
+base_url = "http://localhost:5000/api/"
+
 def testDb():
-    res = r.get("http://localhost:5000/api/selectDb")
+    res = r.get(f"{base_url}selectDb")
     assert res.json()
 
 def testCreateDb():
-    res = r.get("http://localhost:5000/api/CreateDb")
+    res = r.get(f"{base_url}CreateDb")
     assert res.json()
 
 def testCreatePaste():
-    res = r.put("http://localhost:5000/api/new",
+    res = r.put(f"{base_url}new",
                 json ={"name":"Initial Paste", "content":"Welcome to LocalPaste"}
                )
     assert res.json()
