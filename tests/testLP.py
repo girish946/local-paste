@@ -1,18 +1,18 @@
 import requests as r
 
 def testDb():
-    res = r.get("http://0.0.0.0:8000/api/selectDb")
-    print(res.json())
+    res = r.get("http://localhost:5000/api/selectDb")
+    assert res.json()
 
 def testCreateDb():
-    res = r.get("http://0.0.0.0:8000/api/CreateDb")
-    print(res.json())
+    res = r.get("http://localhost:5000/api/CreateDb")
+    assert res.json()
 
 def testCreatePaste():
-    res = r.put("http://0.0.0.0:8000/api/new",
+    res = r.put("http://localhost:5000/api/new",
                 json ={"name":"Initial Paste", "content":"Welcome to LocalPaste"}
                )
-    print(res.json())
+    assert res.json()
 
 if __name__ == '__main__':
     testDb()

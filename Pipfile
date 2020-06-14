@@ -12,7 +12,7 @@ peewee = "*"
 flask-restful = "*"
 gunicorn = "*"
 black = "==19.3b0"
-
+pytest = "*"
 [dev-packages]
 
 [requires]
