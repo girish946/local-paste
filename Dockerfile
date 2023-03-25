@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.10-alpine
 RUN pip install --upgrade pip
 RUN mkdir /db
 RUN chmod 775 /db
